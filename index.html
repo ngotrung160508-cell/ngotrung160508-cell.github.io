@@ -1,165 +1,206 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Shop đồ cũ Vàng Đầu Làng</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Shop bán đồ cũ cá nhân Vàng Đầu Làng – giá tốt – liên hệ trực tiếp">
+<meta charset="UTF-8">
+<title>Shop đồ cũ Vàng Đầu Làng</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Shop bán đồ cũ cá nhân Vàng Đầu Làng – giá tốt – liên hệ 0976427208">
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Coiny&family=Be+Vietnam+Pro:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Coiny&family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Be Vietnam Pro', sans-serif;
-      background: #fff7ed;
-      color: #111;
-    }
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Be Vietnam Pro',sans-serif;
+  background:#fff7ed;
+  color:#111;
+}
 
-    /* HEADER TẾT */
-    header {
-      background: linear-gradient(135deg, #b91c1c, #facc15);
-      color: #fff;
-      text-align: center;
-      padding: 40px 20px;
-      position: relative;
-    }
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#b91c1c,#facc15);
+  color:#fff;
+  text-align:center;
+  padding:50px 20px 70px;
+  position:relative;
+  overflow:hidden;
+}
 
-    header::after {
-      content: "🎊🧧🎉";
-      position: absolute;
-      bottom: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 28px;
-    }
+/* HỌA TIẾT VẼ */
+.decoration{
+  position:absolute;
+  font-size:40px;
+  opacity:.9;
+}
+.dec1{top:10px;left:20px}
+.dec2{top:10px;right:20px}
+.dec3{bottom:10px;left:40px}
+.dec4{bottom:10px;right:40px}
 
-    header h1 {
-      font-family: 'Coiny', cursive;
-      font-size: 42px;
-      margin: 0;
-      text-shadow: 2px 2px 0 #7f1d1d;
-    }
+/* TITLE */
+header h1{
+  font-family:'Coiny',cursive;
+  font-size:46px;
+  margin:0;
+  text-shadow:3px 3px 0 #7f1d1d;
+}
+header p{
+  margin-top:12px;
+  font-size:18px;
+  font-weight:600;
+}
 
-    header p {
-      margin-top: 10px;
-      font-size: 18px;
-      font-weight: 600;
-    }
+/* CONTAINER */
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:60px 15px 30px;
+}
 
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 50px 15px 30px;
-    }
+h2{
+  text-align:center;
+  color:#b91c1c;
+  margin-bottom:35px;
+  font-size:30px;
+}
 
-    h2 {
-      text-align: center;
-      color: #b91c1c;
-      margin-bottom: 30px;
-    }
+/* PRODUCTS */
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:25px;
+}
 
-    /* SẢN PHẨM */
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 20px;
-    }
+.product{
+  background:white;
+  border-radius:16px;
+  padding:15px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+  border:3px solid #fde68a;
+  transition:.3s;
+}
+.product:hover{
+  transform:translateY(-6px) scale(1.02);
+}
 
-    .product {
-      background: white;
-      border-radius: 14px;
-      padding: 15px;
-      text-align: center;
-      box-shadow: 0 6px 15px rgba(0,0,0,.15);
-      border: 2px solid #fde68a;
-    }
+.product img{
+  width:100%;
+  border-radius:12px;
+}
 
-    .product img {
-      width: 100%;
-      border-radius: 10px;
-    }
+.product h3{
+  margin:10px 0 6px;
+  font-size:18px;
+}
 
-    .product h3 {
-      margin: 10px 0 5px;
-    }
+.price{
+  color:#dc2626;
+  font-size:20px;
+  font-weight:700;
+}
 
-    .price {
-      color: #dc2626;
-      font-size: 20px;
-      font-weight: bold;
-    }
+.buy{
+  margin-top:10px;
+  padding:10px 18px;
+  background:#16a34a;
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
+}
+.buy:hover{background:#15803d}
 
-    .buy {
-      margin-top: 10px;
-      padding: 10px 16px;
-      background: #16a34a;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: bold;
-    }
-
-    .buy:hover {
-      background: #15803d;
-    }
-
-    footer {
-      margin-top: 40px;
-      padding: 20px;
-      text-align: center;
-      background: #7f1d1d;
-      color: #fde68a;
-      font-size: 14px;
-    }
-  </style>
+/* FOOTER */
+footer{
+  margin-top:40px;
+  padding:25px;
+  text-align:center;
+  background:#7f1d1d;
+  color:#fde68a;
+  font-size:15px;
+}
+</style>
 </head>
+
 <body>
 
 <header>
+  <!-- HỌA TIẾT VẼ TẾT -->
+  <div class="decoration dec1">🎍</div>
+  <div class="decoration dec2">🧧</div>
+  <div class="decoration dec3">💰</div>
+  <div class="decoration dec4">🌿</div>
+
   <h1>SHOP ĐỒ CŨ<br>VÀNG ĐẦU LÀNG</h1>
-  <p>Bán đồ cũ cá nhân – Giá tốt – Uy tín</p>
+  <p>Giá tốt – Đồ thật – Liên hệ nhanh</p>
 </header>
 
 <div class="container">
-  <h2>🛒 Sản phẩm đang bán</h2>
+  <h2>🛒 SẢN PHẨM ĐANG BÁN</h2>
 
   <div class="products">
 
     <div class="product">
-      <img src="https://via.placeholder.com/300x200" alt="">
+      <img src="https://via.placeholder.com/300x200">
       <h3>Tai nghe Bluetooth</h3>
       <p class="price">350.000đ</p>
-      <button class="buy" onclick="mua('Tai nghe Bluetooth', '350.000đ')">Mua sản phẩm</button>
+      <button class="buy" onclick="mua('Tai nghe Bluetooth','350.000đ')">Mua</button>
     </div>
 
     <div class="product">
-      <img src="https://via.placeholder.com/300x200" alt="">
+      <img src="https://via.placeholder.com/300x200">
       <h3>Bàn phím cơ cũ</h3>
       <p class="price">450.000đ</p>
-      <button class="buy" onclick="mua('Bàn phím cơ cũ', '450.000đ')">Mua sản phẩm</button>
+      <button class="buy" onclick="mua('Bàn phím cơ cũ','450.000đ')">Mua</button>
+    </div>
+
+    <div class="product">
+      <img src="https://via.placeholder.com/300x200">
+      <h3>Chuột gaming</h3>
+      <p class="price">250.000đ</p>
+      <button class="buy" onclick="mua('Chuột gaming','250.000đ')">Mua</button>
+    </div>
+
+    <div class="product">
+      <img src="https://via.placeholder.com/300x200">
+      <h3>Loa Bluetooth</h3>
+      <p class="price">500.000đ</p>
+      <button class="buy" onclick="mua('Loa Bluetooth','500.000đ')">Mua</button>
+    </div>
+
+    <div class="product">
+      <img src="https://via.placeholder.com/300x200">
+      <h3>Ổ cứng SSD 256GB</h3>
+      <p class="price">600.000đ</p>
+      <button class="buy" onclick="mua('SSD 256GB','600.000đ')">Mua</button>
+    </div>
+
+    <div class="product">
+      <img src="https://via.placeholder.com/300x200">
+      <h3>Webcam Full HD</h3>
+      <p class="price">420.000đ</p>
+      <button class="buy" onclick="mua('Webcam Full HD','420.000đ')">Mua</button>
     </div>
 
   </div>
 </div>
 
 <footer>
-  📞 Liên hệ mua hàng: Zalo 0123 456 789 <br>
-  © 2025 Shop đồ cũ Vàng Đầu Làng
+  📞 Liên hệ: <b>0976 427 208</b><br>
+  © 2025 Shop đồ cũ Vàng Đầu Làng – Mua may bán đắt 🎊
 </footer>
 
 <script>
-  function mua(ten, gia) {
-    alert(
-      "🧧 BẠN ĐANG CHỌN MUA 🧧\n\n" +
-      "Sản phẩm: " + ten + "\n" +
-      "Giá: " + gia + "\n\n" +
-      "👉 Liên hệ Zalo để chốt đơn!"
+function mua(ten,gia){
+  window.location.href =
+    "https://zalo.me/0976427208?text=" +
+    encodeURIComponent(
+      "Tôi muốn mua: " + ten + " | Giá: " + gia
     );
-  }
+}
 </script>
 
 </body>
