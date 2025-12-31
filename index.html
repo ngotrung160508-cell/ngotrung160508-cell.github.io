@@ -190,3 +190,212 @@ loop();
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Cờ Tướng Vàng Đầu Làng</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{margin:0; background:#0f172a; color:#e5e7eb; font-family:Segoe UI,Arial; overflow:hidden;}
+canvas{display:block; margin:auto;}
+#ui{position:absolute; inset:0; display:flex; align-items:center; justify-content:center;}
+.menu{text-align:center;}
+.menu h1{font-size:48px; letter-spacing:2px; margin-bottom:10px;}
+.menu p{opacity:.7; margin-bottom:30px;}
+.btn{display:block;width:260px;margin:15px auto;padding:14px;font-size:18px;border-radius:12px;border:none;cursor:pointer;background:linear-gradient(135deg,#334155,#1e293b);color:#e5e7eb;transition:.25s;}
+.btn:hover{transform:scale(1.05); background:linear-gradient(135deg,#475569,#334155);}
+</style>
+</head>
+<body>
+<canvas id="game" width="900" height="660"></canvas>
+<div id="ui"></div>
+<script>
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+const ui=document.getElementById("ui");
+
+const CELL=60;
+const OFFSET_X=150;
+const OFFSET_Y=60;
+
+let scene="menu";
+let mode=null;
+let currentPlayer="red";
+let selected=null;
+
+// MENU
+function showMenu(){
+  ui.innerHTML=`<div class="menu">
+  <h1>♟️ CỜ TƯỚNG VÀNG ĐẦU LÀNG</h1>
+  <p>Chọn chế độ chơi</p>
+  <button class="btn" onclick="startGame('ai')">🤖 Đánh với máy</button>
+  <button class="btn" onclick="startGame('pvp')">👥 Đánh 2 người</button>
+  </div>`;
+}
+showMenu();
+
+function startGame(m){
+  mode=m;
+  scene="play";
+  ui.innerHTML="";
+  initPieces();
+}
+
+// LUẬT CƠ BẢN
+let pieces=[];
+function initPieces(){
+  pieces=[
+    // ĐỎ
+    {x:0,y:9,t:"車",c:"red"},{x:8,y:9,t:"車",c:"red"},
+    {x:1,y:9,t:"馬",c:"red"},{x:7,y:9,t:"馬",c:"red"},
+    {x:2,y:9,t:"相",c:"red"},{x:6,y:9,t:"相",c:"red"},
+    {x:3,y:9,t:"仕",c:"red"},{x:5,y:9,t:"仕",c:"red"},
+    {x:4,y:9,t:"帥",c:"red"},
+    {x:1,y:7,t:"炮",c:"red"},{x:7,y:7,t:"炮",c:"red"},
+    {x:0,y:6,t:"兵",c:"red"},{x:2,y:6,t:"兵",c:"red"},
+    {x:4,y:6,t:"兵",c:"red"},{x:6,y:6,t:"兵",c:"red"},
+    {x:8,y:6,t:"兵",c:"red"},
+    // ĐEN
+    {x:0,y:0,t:"車",c:"black"},{x:8,y:0,t:"車",c:"black"},
+    {x:1,y:0,t:"馬",c:"black"},{x:7,y:0,t:"馬",c:"black"},
+    {x:2,y:0,t:"象",c:"black"},{x:6,y:0,t:"象",c:"black"},
+    {x:3,y:0,t:"士",c:"black"},{x:5,y:0,t:"士",c:"black"},
+    {x:4,y:0,t:"將",c:"black"},
+    {x:1,y:2,t:"砲",c:"black"},{x:7,y:2,t:"砲",c:"black"},
+    {x:0,y:3,t:"卒",c:"black"},{x:2,y:3,t:"卒",c:"black"},
+    {x:4,y:3,t:"卒",c:"black"},{x:6,y:3,t:"卒",c:"black"},{x:8,y:3,t:"卒",c:"black"}
+  ];
+}
+
+// BOARD
+function drawBoard(){
+  ctx.fillStyle="#0f172a";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  ctx.strokeStyle="#475569";
+  ctx.lineWidth=2;
+
+  for(let i=0;i<10;i++){
+    ctx.beginPath();
+    ctx.moveTo(OFFSET_X,OFFSET_Y+i*CELL);
+    ctx.lineTo(OFFSET_X+8*CELL,OFFSET_Y+i*CELL);
+    ctx.stroke();
+  }
+  for(let i=0;i<9;i++){
+    ctx.beginPath();
+    ctx.moveTo(OFFSET_X+i*CELL,OFFSET_Y);
+    ctx.lineTo(OFFSET_X+i*CELL,OFFSET_Y+4*CELL);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(OFFSET_X+i*CELL,OFFSET_Y+5*CELL);
+    ctx.lineTo(OFFSET_X+i*CELL,OFFSET_Y+9*CELL);
+    ctx.stroke();
+  }
+
+  ctx.fillStyle="#64748b";
+  ctx.font="28px serif";
+  ctx.fillText("楚 河",OFFSET_X+1.5*CELL,OFFSET_Y+4.6*CELL);
+  ctx.fillText("漢 界",OFFSET_X+5*CELL,OFFSET_Y+4.6*CELL);
+}
+
+// DRAW PIECES
+function drawPieces(){
+  pieces.forEach(p=>{
+    const x=OFFSET_X+p.x*CELL;
+    const y=OFFSET_Y+p.y*CELL;
+    ctx.beginPath();
+    ctx.arc(x,y,26,0,Math.PI*2);
+    ctx.fillStyle="#f8fafc";
+    ctx.fill();
+    ctx.strokeStyle=p.c==="red"?"#dc2626":"#111827";
+    ctx.lineWidth=3;
+    ctx.stroke();
+    ctx.fillStyle=p.c==="red"?"#dc2626":"#111827";
+    ctx.font="26px serif";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.fillText(p.t,x,y);
+
+    if(selected===p){
+      ctx.strokeStyle="#16a34a";
+      ctx.lineWidth=4;
+      ctx.stroke();
+    }
+  });
+}
+
+// CLICK
+canvas.addEventListener("click",e=>{
+  if(scene!=="play") return;
+  const rect=canvas.getBoundingClientRect();
+  const x=Math.round((e.clientX-rect.left-OFFSET_X)/CELL);
+  const y=Math.round((e.clientY-rect.top-OFFSET_Y)/CELL);
+  const p=pieces.find(p=>p.x===x && p.y===y);
+  if(p && p.c===currentPlayer){
+    selected=p;
+  }else if(selected && canMove(selected,x,y)){
+    const target=pieces.find(p=>p.x===x && p.y===y);
+    if(target && target.c!==selected.c){
+      pieces.splice(pieces.indexOf(target),1);
+    }
+    selected.x=x;
+    selected.y=y;
+    selected=null;
+    if(mode==="pvp"){
+      currentPlayer=currentPlayer==="red"?"black":"red";
+    }else if(mode==="ai" && currentPlayer==="red"){
+      currentPlayer="black";
+      setTimeout(aiMove,500);
+    }
+  }
+});
+
+// LUẬT CƠ BẢN
+function canMove(p,x,y){
+  const dx=Math.abs(p.x-x);
+  const dy=Math.abs(p.y-y);
+  if(p.t==="兵"||p.t==="卒"){
+    if(p.c==="red"){if(y===p.y-1 && x===p.x) return true; if(p.y<=4 && dx===1 && dy===0) return true;}
+    else{if(y===p.y+1 && x===p.x) return true; if(p.y>=5 && dx===1 && dy===0) return true;}
+  }
+  if(p.t==="車"){if(p.x===x || p.y===y) return true;}
+  if(p.t==="馬"){return (dx===1 && dy===2)||(dx===2 && dy===1);}
+  if(p.t==="炮"||p.t==="砲"){if(p.x===x || p.y===y) return true;}
+  if(p.t==="帥"||p.t==="將"){return dx+dy===1;}
+  return false;
+}
+
+// AI ĐƠN GIẢN
+function aiMove(){
+  const aiPieces=pieces.filter(p=>p.c==="black");
+  let moved=false;
+  for(let p of aiPieces){
+    for(let nx=0;nx<9;nx++){
+      for(let ny=0;ny<10;ny++){
+        if(canMove(p,nx,ny) && !pieces.find(o=>o.x===nx && o.y===ny && o.c==="black")){
+          p.x=nx; p.y=ny; moved=true; break;
+        }
+      }
+      if(moved) break;
+    }
+    if(moved) break;
+  }
+  currentPlayer="red";
+}
+
+// LOOP
+function loop(){
+  if(scene==="play"){
+    drawBoard();
+    drawPieces();
+    ctx.fillStyle="#94a3b8";
+    ctx.font="16px Arial";
+    ctx.fillText(mode==="ai"?"Chế độ: Đánh với máy":"Chế độ: 2 người",20,30);
+  }
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
