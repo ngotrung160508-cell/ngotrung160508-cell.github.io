@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <title>Shop đồ cũ Vàng Đầu Làng</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Shop bán đồ cũ cá nhân Vàng Đầu Làng – giá tốt – liên hệ 0976427208">
+<meta name="description" content="Shop bán đồ cũ cá nhân Vàng Đầu Làng">
 
-<link href="https://fonts.googleapis.com/css2?family=Coiny&family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Coiny&display=swap" rel="stylesheet">
 
 <style>
 *{box-sizing:border-box}
@@ -14,192 +14,216 @@ body{
   margin:0;
   font-family:'Be Vietnam Pro',sans-serif;
   background:#fff7ed;
-  color:#111;
+  overflow-x:hidden;
 }
 
-/* HEADER */
+/* ===== HEADER + CẢNH ===== */
 header{
-  background:linear-gradient(135deg,#b91c1c,#facc15);
-  color:#fff;
-  text-align:center;
-  padding:50px 20px 70px;
   position:relative;
+  height:380px;
+  background:linear-gradient(to bottom,#b91c1c,#facc15);
   overflow:hidden;
+  color:white;
+  text-align:center;
+  padding-top:90px;
 }
 
-/* HỌA TIẾT VẼ */
-.decoration{
+/* MÂY TRÔI */
+.cloud{
   position:absolute;
-  font-size:40px;
-  opacity:.9;
+  top:40px;
+  width:200px;
+  height:60px;
+  background:white;
+  border-radius:50px;
+  opacity:.8;
+  animation:cloudMove 40s linear infinite;
 }
-.dec1{top:10px;left:20px}
-.dec2{top:10px;right:20px}
-.dec3{bottom:10px;left:40px}
-.dec4{bottom:10px;right:40px}
+.cloud::before,.cloud::after{
+  content:"";
+  position:absolute;
+  background:white;
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  top:-40px;
+}
+.cloud::before{left:20px}
+.cloud::after{right:20px}
+
+@keyframes cloudMove{
+  from{left:-250px}
+  to{left:110%}
+}
+
+/* HOA ĐÀO RƠI */
+.flower{
+  position:absolute;
+  top:-20px;
+  width:12px;
+  height:12px;
+  background:pink;
+  border-radius:50%;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{
+    transform:translateY(420px) rotate(360deg);
+    opacity:0;
+  }
+}
 
 /* TITLE */
 header h1{
   font-family:'Coiny',cursive;
-  font-size:46px;
+  font-size:48px;
   margin:0;
   text-shadow:3px 3px 0 #7f1d1d;
 }
 header p{
-  margin-top:12px;
   font-size:18px;
   font-weight:600;
 }
 
-/* CONTAINER */
+/* ===== SHOP ===== */
 .container{
   max-width:1200px;
   margin:auto;
-  padding:60px 15px 30px;
+  padding:50px 15px;
 }
-
 h2{
   text-align:center;
   color:#b91c1c;
-  margin-bottom:35px;
   font-size:30px;
+  margin-bottom:30px;
 }
 
-/* PRODUCTS */
 .products{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
   gap:25px;
 }
-
 .product{
   background:white;
   border-radius:16px;
-  padding:15px;
-  text-align:center;
   box-shadow:0 10px 25px rgba(0,0,0,.15);
-  border:3px solid #fde68a;
+  overflow:hidden;
   transition:.3s;
 }
 .product:hover{
-  transform:translateY(-6px) scale(1.02);
+  transform:translateY(-8px);
 }
-
 .product img{
   width:100%;
-  border-radius:12px;
+  height:180px;
+  object-fit:cover;
 }
-
-.product h3{
-  margin:10px 0 6px;
-  font-size:18px;
+.product .info{
+  padding:15px;
+  text-align:center;
 }
-
 .price{
   color:#dc2626;
   font-size:20px;
   font-weight:700;
 }
-
 .buy{
   margin-top:10px;
-  padding:10px 18px;
+  padding:10px 16px;
   background:#16a34a;
   color:white;
   border:none;
-  border-radius:10px;
+  border-radius:8px;
   cursor:pointer;
   font-weight:700;
 }
-.buy:hover{background:#15803d}
 
 /* FOOTER */
 footer{
-  margin-top:40px;
-  padding:25px;
-  text-align:center;
   background:#7f1d1d;
   color:#fde68a;
-  font-size:15px;
+  text-align:center;
+  padding:25px;
 }
+
+/* RANDOM HOA */
 </style>
 </head>
-
 <body>
 
 <header>
-  <!-- HỌA TIẾT VẼ TẾT -->
-  <div class="decoration dec1">🎍</div>
-  <div class="decoration dec2">🧧</div>
-  <div class="decoration dec3">💰</div>
-  <div class="decoration dec4">🌿</div>
+  <div class="cloud" style="animation-duration:50s;top:60px"></div>
+  <div class="cloud" style="animation-duration:60s;top:120px;opacity:.6"></div>
 
   <h1>SHOP ĐỒ CŨ<br>VÀNG ĐẦU LÀNG</h1>
-  <p>Giá tốt – Đồ thật – Liên hệ nhanh</p>
+  <p>Bán đồ cũ cá nhân – Giá tốt – Uy tín</p>
+
+  <!-- hoa đào -->
+  <script>
+    for(let i=0;i<25;i++){
+      let f=document.createElement("div");
+      f.className="flower";
+      f.style.left=Math.random()*100+"%";
+      f.style.animationDuration=(5+Math.random()*5)+"s";
+      document.currentScript.parentElement.appendChild(f);
+    }
+  </script>
 </header>
 
 <div class="container">
-  <h2>🛒 SẢN PHẨM ĐANG BÁN</h2>
+<h2>🛒 SẢN PHẨM</h2>
 
-  <div class="products">
+<div class="products">
 
-    <div class="product">
-      <img src="https://via.placeholder.com/300x200">
-      <h3>Tai nghe Bluetooth</h3>
-      <p class="price">350.000đ</p>
-      <button class="buy" onclick="mua('Tai nghe Bluetooth','350.000đ')">Mua</button>
-    </div>
+<div class="product">
+<img src="https://images.unsplash.com/photo-1585386959984-a41552262b82">
+<div class="info">
+<h3>Tai nghe Bluetooth</h3>
+<p class="price">350.000đ</p>
+<button class="buy" onclick="mua('Tai nghe Bluetooth','350.000đ')">Mua</button>
+</div>
+</div>
 
-    <div class="product">
-      <img src="https://via.placeholder.com/300x200">
-      <h3>Bàn phím cơ cũ</h3>
-      <p class="price">450.000đ</p>
-      <button class="buy" onclick="mua('Bàn phím cơ cũ','450.000đ')">Mua</button>
-    </div>
+<div class="product">
+<img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8">
+<div class="info">
+<h3>Bàn phím cơ</h3>
+<p class="price">450.000đ</p>
+<button class="buy" onclick="mua('Bàn phím cơ','450.000đ')">Mua</button>
+</div>
+</div>
 
-    <div class="product">
-      <img src="https://via.placeholder.com/300x200">
-      <h3>Chuột gaming</h3>
-      <p class="price">250.000đ</p>
-      <button class="buy" onclick="mua('Chuột gaming','250.000đ')">Mua</button>
-    </div>
+<div class="product">
+<img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04">
+<div class="info">
+<h3>Chuột Gaming</h3>
+<p class="price">250.000đ</p>
+<button class="buy" onclick="mua('Chuột Gaming','250.000đ')">Mua</button>
+</div>
+</div>
 
-    <div class="product">
-      <img src="https://via.placeholder.com/300x200">
-      <h3>Loa Bluetooth</h3>
-      <p class="price">500.000đ</p>
-      <button class="buy" onclick="mua('Loa Bluetooth','500.000đ')">Mua</button>
-    </div>
+<div class="product">
+<img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db">
+<div class="info">
+<h3>Loa Bluetooth</h3>
+<p class="price">500.000đ</p>
+<button class="buy" onclick="mua('Loa Bluetooth','500.000đ')">Mua</button>
+</div>
+</div>
 
-    <div class="product">
-      <img src="https://via.placeholder.com/300x200">
-      <h3>Ổ cứng SSD 256GB</h3>
-      <p class="price">600.000đ</p>
-      <button class="buy" onclick="mua('SSD 256GB','600.000đ')">Mua</button>
-    </div>
-
-    <div class="product">
-      <img src="https://via.placeholder.com/300x200">
-      <h3>Webcam Full HD</h3>
-      <p class="price">420.000đ</p>
-      <button class="buy" onclick="mua('Webcam Full HD','420.000đ')">Mua</button>
-    </div>
-
-  </div>
+</div>
 </div>
 
 <footer>
-  📞 Liên hệ: <b>0976 427 208</b><br>
-  © 2025 Shop đồ cũ Vàng Đầu Làng – Mua may bán đắt 🎊
+📞 Liên hệ: <b>0976 427 208</b><br>
+© 2025 Shop đồ cũ Vàng Đầu Làng
 </footer>
 
 <script>
 function mua(ten,gia){
-  window.location.href =
-    "https://zalo.me/0976427208?text=" +
-    encodeURIComponent(
-      "Tôi muốn mua: " + ten + " | Giá: " + gia
-    );
+  window.location.href=
+  "https://zalo.me/0976427208?text="+
+  encodeURIComponent("Tôi muốn mua "+ten+" giá "+gia);
 }
 </script>
 
