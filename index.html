@@ -2,217 +2,188 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Đừng Để Cậu Vàng Bị Bắt</title>
+<title>Cờ Tướng Vàng Đầu Làng</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
+*{box-sizing:border-box}
 body{
   margin:0;
-  background:#111;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
+  background:#0f172a;
+  color:#e5e7eb;
+  font-family:Segoe UI,Roboto,Arial;
+  overflow:hidden;
 }
 canvas{
-  background:linear-gradient(#87ceeb,#fef3c7);
-  border:5px solid #7c2d12;
+  display:block;
+  margin:auto;
+}
+
+/* ===== UI ===== */
+#ui{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.menu{
+  text-align:center;
+  animation:fadeIn 1s ease;
+}
+.menu h1{
+  font-size:48px;
+  letter-spacing:2px;
+  margin-bottom:10px;
+}
+.menu p{
+  opacity:.7;
+  margin-bottom:30px;
+}
+.btn{
+  display:block;
+  width:260px;
+  margin:15px auto;
+  padding:14px;
+  font-size:18px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  background:linear-gradient(135deg,#334155,#1e293b);
+  color:#e5e7eb;
+  transition:.25s;
+}
+.btn:hover{
+  transform:scale(1.05);
+  background:linear-gradient(135deg,#475569,#334155);
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:none}
 }
 </style>
 </head>
 
 <body>
-<canvas id="game" width="1400" height="500"></canvas>
+<canvas id="game" width="900" height="600"></canvas>
+
+<div id="ui"></div>
 
 <script>
-/* ======================
-   KHỞI TẠO
-====================== */
+/* ===============================
+   CORE
+================================ */
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
+const ui = document.getElementById("ui");
 
-const W = canvas.width;
-const H = canvas.height;
+let scene = "menu"; // menu | play
+let mode = null;    // ai | pvp
 
-const GROUND = 380;
-let speed = 7;
-let gameOver = false;
+/* ===============================
+   MENU
+================================ */
+function showMenu(){
+  ui.innerHTML = `
+    <div class="menu">
+      <h1>♟️ CỜ TƯỚNG<br>VÀNG ĐẦU LÀNG</h1>
+      <p>Game cờ tướng hiện đại – thư giãn – trí tuệ</p>
+      <button class="btn" onclick="startGame('ai')">🤖 Đánh với máy</button>
+      <button class="btn" onclick="startGame('pvp')">👥 Đánh 2 người</button>
+    </div>
+  `;
+}
+showMenu();
 
-/* ======================
-   INPUT
-====================== */
-let jumpKey = false;
-document.addEventListener("keydown",e=>{
-  if(e.code==="Space") jumpKey = true;
-});
-document.addEventListener("keyup",e=>{
-  if(e.code==="Space") jumpKey = false;
-});
-canvas.addEventListener("click",()=>jumpKey=true);
-
-/* ======================
-   CẬU VÀNG
-====================== */
-const dog = {
-  x:180,
-  y:GROUND,
-  w:90,
-  h:60,
-  vy:0,
-  onGround:true,
-  state:"run",
-  t:0
-};
-
-/* ======================
-   NHẢY CHUẨN DINO
-====================== */
-function updateDog(){
-  if(jumpKey && dog.onGround){
-    dog.vy = -18;
-    dog.onGround = false;
-    dog.state = "jump";
-  }
-
-  // gravity tăng dần (rơi nhanh)
-  dog.vy += dog.vy < 0 ? 0.9 : 1.2;
-  dog.y += dog.vy;
-
-  if(dog.y >= GROUND){
-    dog.y = GROUND;
-    dog.vy = 0;
-    dog.onGround = true;
-    dog.state = "run";
-  }
-
-  dog.t += 0.25;
+function startGame(m){
+  mode = m;
+  scene = "play";
+  ui.innerHTML = "";
 }
 
-/* ======================
-   VẼ CẬU VÀNG
-====================== */
-function drawDog(){
-  ctx.save();
-  ctx.translate(dog.x, dog.y);
-  const run = Math.sin(dog.t);
+/* ===============================
+   BÀN CỜ – NỀN
+================================ */
+const CELL = 60;
+const OFFSET_X = 150;
+const OFFSET_Y = 60;
 
-  // thân
-  ctx.fillStyle="#fbbf24";
-  ctx.beginPath();
-  ctx.ellipse(0,0,45,28,0,0,Math.PI*2);
-  ctx.fill();
+function drawBoard(){
+  ctx.fillStyle="#020617";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  // đầu
-  ctx.beginPath();
-  ctx.ellipse(55,-18,22,20,0,0,Math.PI*2);
-  ctx.fill();
+  ctx.strokeStyle="#475569";
+  ctx.lineWidth=2;
 
-  // tai
-  ctx.fillStyle="#f59e0b";
-  ctx.beginPath();
-  ctx.moveTo(48,-45); ctx.lineTo(35,-20); ctx.lineTo(55,-25); ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(62,-45); ctx.lineTo(55,-25); ctx.lineTo(75,-20); ctx.fill();
+  for(let i=0;i<10;i++){
+    ctx.beginPath();
+    ctx.moveTo(OFFSET_X,OFFSET_Y+i*CELL);
+    ctx.lineTo(OFFSET_X+8*CELL,OFFSET_Y+i*CELL);
+    ctx.stroke();
+  }
+  for(let i=0;i<9;i++){
+    ctx.beginPath();
+    ctx.moveTo(OFFSET_X+i*CELL,OFFSET_Y);
+    ctx.lineTo(OFFSET_X+i*CELL,OFFSET_Y+4*CELL);
+    ctx.stroke();
 
-  // mắt
-  ctx.fillStyle="#000";
-  ctx.beginPath();
-  ctx.arc(60,-20,3,0,Math.PI*2);
-  ctx.fill();
-
-  // chân
-  ctx.strokeStyle="#92400e";
-  ctx.lineWidth=5;
-  if(dog.state==="run"){
-    ctx.beginPath(); ctx.moveTo(20,20); ctx.lineTo(20,20+run*12); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(-20,20); ctx.lineTo(-20,20-run*12); ctx.stroke();
-  }else{
-    ctx.beginPath(); ctx.moveTo(20,20); ctx.lineTo(20,5); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(-20,20); ctx.lineTo(-20,5); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(OFFSET_X+i*CELL,OFFSET_Y+5*CELL);
+    ctx.lineTo(OFFSET_X+i*CELL,OFFSET_Y+9*CELL);
+    ctx.stroke();
   }
 
-  // đuôi
-  ctx.strokeStyle="#f59e0b";
-  ctx.lineWidth=6;
-  ctx.beginPath();
-  ctx.moveTo(-45,-5);
-  ctx.quadraticCurveTo(-65,-20+run*4,-55,-45);
-  ctx.stroke();
-
-  ctx.restore();
+  ctx.fillStyle="#64748b";
+  ctx.font="28px serif";
+  ctx.fillText("楚 河",OFFSET_X+1.5*CELL,OFFSET_Y+4.6*CELL);
+  ctx.fillText("漢 界",OFFSET_X+5*CELL,OFFSET_Y+4.6*CELL);
 }
 
-/* ======================
-   CHƯỚNG NGẠI TẾT
-====================== */
-let obstacles = [];
+/* ===============================
+   QUÂN CỜ (TẠM THỜI)
+================================ */
+const pieces = [
+  {x:4,y:9,t:"帥",c:"red"},
+  {x:4,y:0,t:"將",c:"black"}
+];
 
-function spawnObstacle(){
-  const type = Math.random()<0.5 ? "banh" : "phao";
-  obstacles.push({
-    type,
-    x:W+40,
-    w:type==="banh"?50:25,
-    h:type==="banh"?40:70
+function drawPieces(){
+  pieces.forEach(p=>{
+    const x = OFFSET_X+p.x*CELL;
+    const y = OFFSET_Y+p.y*CELL;
+
+    ctx.beginPath();
+    ctx.arc(x,y,26,0,Math.PI*2);
+    ctx.fillStyle="#f8fafc";
+    ctx.fill();
+
+    ctx.strokeStyle=p.c==="red"?"#dc2626":"#111827";
+    ctx.lineWidth=3;
+    ctx.stroke();
+
+    ctx.fillStyle=p.c==="red"?"#dc2626":"#111827";
+    ctx.font="26px serif";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.fillText(p.t,x,y);
   });
 }
-setInterval(spawnObstacle,1600);
 
-/* ======================
-   VẼ CHƯỚNG NGẠI
-====================== */
-function drawObstacle(o){
-  if(o.type==="banh"){
-    ctx.fillStyle="#166534";
-    ctx.fillRect(o.x,GROUND+20,o.w,o.h);
-  }else{
-    ctx.fillStyle="#dc2626";
-    ctx.fillRect(o.x,GROUND-10,o.w,o.h);
-  }
-}
-
-/* ======================
-   VA CHẠM
-====================== */
-function hit(o){
-  return (
-    dog.x+40 > o.x &&
-    dog.x-40 < o.x+o.w &&
-    dog.y+20 > GROUND+20-o.h
-  );
-}
-
-/* ======================
-   GAME LOOP
-====================== */
+/* ===============================
+   LOOP
+================================ */
 function loop(){
-  ctx.clearRect(0,0,W,H);
+  if(scene==="play"){
+    drawBoard();
+    drawPieces();
 
-  // nền + đất
-  ctx.fillStyle="#facc15";
-  ctx.fillRect(0,GROUND+30,W,H);
-
-  updateDog();
-  drawDog();
-
-  obstacles.forEach((o,i)=>{
-    o.x -= speed;
-    drawObstacle(o);
-
-    if(hit(o)){
-      gameOver = true;
-    }
-    if(o.x < -60) obstacles.splice(i,1);
-  });
-
-  if(gameOver){
-    ctx.fillStyle="rgba(0,0,0,.7)";
-    ctx.fillRect(0,0,W,H);
-    ctx.fillStyle="#fff";
-    ctx.font="48px Arial";
-    ctx.fillText("CẬU VÀNG BỊ BẮT 😭",480,240);
-    return;
+    ctx.fillStyle="#94a3b8";
+    ctx.font="16px Arial";
+    ctx.fillText(
+      mode==="ai"?"Chế độ: Đánh với máy":"Chế độ: 2 người",
+      20,30
+    );
   }
-
   requestAnimationFrame(loop);
 }
 loop();
