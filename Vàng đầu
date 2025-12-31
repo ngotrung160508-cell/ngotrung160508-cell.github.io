@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop của tôi</title>
+
+    <meta name="description" content="Shop online bán sản phẩm chất lượng, giá tốt">
+    <meta name="keywords" content="shop online, mua hàng, bán hàng">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: #111;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            padding: 30px;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .product {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .product img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .product h3 {
+            margin: 10px 0 5px;
+        }
+
+        .price {
+            color: red;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .buy {
+            margin-top: 10px;
+            padding: 10px;
+            background: #25d366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #111;
+            color: #aaa;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🛒 SHOP CỦA TÔI</h1>
+    <p>Bán hàng online – Uy tín – Nhanh chóng</p>
+</header>
+
+<div class="container">
+    <h2>Sản phẩm</h2>
+
+    <div class="products">
+
+        <div class="product">
+            <img src="https://via.placeholder.com/300x200" alt="">
+            <h3>Sản phẩm 1</h3>
+            <p class="price">199.000đ</p>
+            <button class="buy" onclick="contact()">Mua ngay</button>
+        </div>
+
+        <div class="product">
+            <img src="https://via.placeholder.com/300x200" alt="">
+            <h3>Sản phẩm 2</h3>
+            <p class="price">299.000đ</p>
+            <button class="buy" onclick="contact()">Mua ngay</button>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    📞 Liên hệ: Zalo 0123 456 789 | Facebook: fb.com/tenban
+</footer>
+
+<script>
+    function contact() {
+        alert("Liên hệ Zalo hoặc Facebook để đặt hàng!");
+    }
+</script>
+
+</body>
+</html>
