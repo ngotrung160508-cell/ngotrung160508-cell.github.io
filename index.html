@@ -2,230 +2,210 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Shop đồ cũ Vàng Đầu Làng</title>
+<title>Đừng Để Cậu Vàng Bị Bắt</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Shop bán đồ cũ cá nhân Vàng Đầu Làng">
-
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&family=Coiny&display=swap" rel="stylesheet">
 
 <style>
-*{box-sizing:border-box}
 body{
   margin:0;
-  font-family:'Be Vietnam Pro',sans-serif;
-  background:#fff7ed;
-  overflow-x:hidden;
+  background:#111;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  user-select:none;
 }
-
-/* ===== HEADER + CẢNH ===== */
-header{
-  position:relative;
-  height:380px;
-  background:linear-gradient(to bottom,#b91c1c,#facc15);
-  overflow:hidden;
-  color:white;
-  text-align:center;
-  padding-top:90px;
+canvas{
+  background:linear-gradient(#87ceeb,#fef3c7);
+  border:5px solid #7c2d12;
 }
-
-/* MÂY TRÔI */
-.cloud{
-  position:absolute;
-  top:40px;
-  width:200px;
-  height:60px;
-  background:white;
-  border-radius:50px;
-  opacity:.8;
-  animation:cloudMove 40s linear infinite;
-}
-.cloud::before,.cloud::after{
-  content:"";
-  position:absolute;
-  background:white;
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  top:-40px;
-}
-.cloud::before{left:20px}
-.cloud::after{right:20px}
-
-@keyframes cloudMove{
-  from{left:-250px}
-  to{left:110%}
-}
-
-/* HOA ĐÀO RƠI */
-.flower{
-  position:absolute;
-  top:-20px;
-  width:12px;
-  height:12px;
-  background:pink;
-  border-radius:50%;
-  animation:fall linear infinite;
-}
-@keyframes fall{
-  to{
-    transform:translateY(420px) rotate(360deg);
-    opacity:0;
-  }
-}
-
-/* TITLE */
-header h1{
-  font-family:'Coiny',cursive;
-  font-size:48px;
-  margin:0;
-  text-shadow:3px 3px 0 #7f1d1d;
-}
-header p{
-  font-size:18px;
-  font-weight:600;
-}
-
-/* ===== SHOP ===== */
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:50px 15px;
-}
-h2{
-  text-align:center;
-  color:#b91c1c;
-  font-size:30px;
-  margin-bottom:30px;
-}
-
-.products{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-  gap:25px;
-}
-.product{
-  background:white;
-  border-radius:16px;
-  box-shadow:0 10px 25px rgba(0,0,0,.15);
-  overflow:hidden;
-  transition:.3s;
-}
-.product:hover{
-  transform:translateY(-8px);
-}
-.product img{
-  width:100%;
-  height:180px;
-  object-fit:cover;
-}
-.product .info{
-  padding:15px;
-  text-align:center;
-}
-.price{
-  color:#dc2626;
-  font-size:20px;
-  font-weight:700;
-}
-.buy{
-  margin-top:10px;
-  padding:10px 16px;
-  background:#16a34a;
-  color:white;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:700;
-}
-
-/* FOOTER */
-footer{
-  background:#7f1d1d;
-  color:#fde68a;
-  text-align:center;
-  padding:25px;
-}
-
-/* RANDOM HOA */
 </style>
 </head>
+
 <body>
-
-<header>
-  <div class="cloud" style="animation-duration:50s;top:60px"></div>
-  <div class="cloud" style="animation-duration:60s;top:120px;opacity:.6"></div>
-
-  <h1>SHOP ĐỒ CŨ<br>VÀNG ĐẦU LÀNG</h1>
-  <p>Bán đồ cũ cá nhân – Giá tốt – Uy tín</p>
-
-  <!-- hoa đào -->
-  <script>
-    for(let i=0;i<25;i++){
-      let f=document.createElement("div");
-      f.className="flower";
-      f.style.left=Math.random()*100+"%";
-      f.style.animationDuration=(5+Math.random()*5)+"s";
-      document.currentScript.parentElement.appendChild(f);
-    }
-  </script>
-</header>
-
-<div class="container">
-<h2>🛒 SẢN PHẨM</h2>
-
-<div class="products">
-
-<div class="product">
-<img src="https://images.unsplash.com/photo-1585386959984-a41552262b82">
-<div class="info">
-<h3>Tai nghe Bluetooth</h3>
-<p class="price">350.000đ</p>
-<button class="buy" onclick="mua('Tai nghe Bluetooth','350.000đ')">Mua</button>
-</div>
-</div>
-
-<div class="product">
-<img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8">
-<div class="info">
-<h3>Bàn phím cơ</h3>
-<p class="price">450.000đ</p>
-<button class="buy" onclick="mua('Bàn phím cơ','450.000đ')">Mua</button>
-</div>
-</div>
-
-<div class="product">
-<img src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04">
-<div class="info">
-<h3>Chuột Gaming</h3>
-<p class="price">250.000đ</p>
-<button class="buy" onclick="mua('Chuột Gaming','250.000đ')">Mua</button>
-</div>
-</div>
-
-<div class="product">
-<img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db">
-<div class="info">
-<h3>Loa Bluetooth</h3>
-<p class="price">500.000đ</p>
-<button class="buy" onclick="mua('Loa Bluetooth','500.000đ')">Mua</button>
-</div>
-</div>
-
-</div>
-</div>
-
-<footer>
-📞 Liên hệ: <b>0976 427 208</b><br>
-© 2025 Shop đồ cũ Vàng Đầu Làng
-</footer>
+<canvas id="game" width="1400" height="500"></canvas>
 
 <script>
-function mua(ten,gia){
-  window.location.href=
-  "https://zalo.me/0976427208?text="+
-  encodeURIComponent("Tôi muốn mua "+ten+" giá "+gia);
-}
-</script>
+/* =========================
+   KHỞI TẠO
+========================= */
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
+const W = canvas.width;
+const H = canvas.height;
+
+const GROUND_Y = 380;
+const GRAVITY = 0.9;
+
+/* =========================
+   CAMERA
+========================= */
+let cameraX = 0;
+
+/* =========================
+   INPUT
+========================= */
+let jumpPressed = false;
+
+document.addEventListener("keydown", e => {
+  if(e.code === "Space") jumpPressed = true;
+});
+document.addEventListener("keyup", e => {
+  if(e.code === "Space") jumpPressed = false;
+});
+canvas.addEventListener("click", () => jumpPressed = true);
+
+/* =========================
+   CẬU VÀNG
+========================= */
+const dog = {
+  x: 200,
+  y: GROUND_Y,
+  w: 90,
+  h: 60,
+  vy: 0,
+  onGround: true,
+  runTime: 0
+};
+
+/* =========================
+   VẬT LÝ NHẢY
+========================= */
+function updateDogPhysics(){
+  if(jumpPressed && dog.onGround){
+    dog.vy = -18;
+    dog.onGround = false;
+  }
+
+  dog.vy += GRAVITY;
+  dog.y += dog.vy;
+
+  if(dog.y >= GROUND_Y){
+    dog.y = GROUND_Y;
+    dog.vy = 0;
+    dog.onGround = true;
+  }
+
+  dog.runTime += 0.15;
+}
+
+/* =========================
+   VẼ CẬU VÀNG (HOẠT HÌNH)
+========================= */
+function drawDog(){
+  ctx.save();
+  ctx.translate(dog.x - cameraX, dog.y);
+
+  const run = Math.sin(dog.runTime);
+
+  // thân
+  ctx.fillStyle = "#fbbf24";
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 45, 28, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // đầu
+  ctx.beginPath();
+  ctx.ellipse(55, -18, 22, 20, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // tai
+  ctx.fillStyle = "#f59e0b";
+  ctx.beginPath();
+  ctx.moveTo(48, -45);
+  ctx.lineTo(35, -20);
+  ctx.lineTo(55, -25);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(62, -45);
+  ctx.lineTo(55, -25);
+  ctx.lineTo(75, -20);
+  ctx.fill();
+
+  // mắt
+  ctx.fillStyle = "#000";
+  ctx.beginPath();
+  ctx.arc(60, -20, 3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // chân trước
+  ctx.strokeStyle = "#92400e";
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(15, 20);
+  ctx.lineTo(15, 20 + run * 10);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(35, 20);
+  ctx.lineTo(35, 20 - run * 10);
+  ctx.stroke();
+
+  // chân sau
+  ctx.beginPath();
+  ctx.moveTo(-15, 20);
+  ctx.lineTo(-15, 20 - run * 10);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(-35, 20);
+  ctx.lineTo(-35, 20 + run * 10);
+  ctx.stroke();
+
+  // đuôi
+  ctx.strokeStyle = "#f59e0b";
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(-45, -10);
+  ctx.quadraticCurveTo(-65, -25 + run * 5, -55, -45);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+/* =========================
+   NỀN + MẶT ĐẤT
+========================= */
+function drawBackground(){
+  // mặt đất
+  ctx.fillStyle = "#facc15";
+  ctx.fillRect(0, GROUND_Y + 30, W, H);
+
+  // đường làng
+  ctx.fillStyle = "#d97706";
+  ctx.fillRect(0, GROUND_Y + 30, W, 8);
+}
+
+/* =========================
+   CAMERA UPDATE
+========================= */
+function updateCamera(){
+  cameraX = dog.x - 200;
+}
+
+/* =========================
+   GAME LOOP
+========================= */
+function loop(){
+  ctx.clearRect(0,0,W,H);
+
+  updateDogPhysics();
+  updateCamera();
+
+  drawBackground();
+  drawDog();
+
+  // hướng dẫn
+  ctx.fillStyle="#7c2d12";
+  ctx.font="18px Arial";
+  ctx.fillText("SPACE / CLICK để nhảy",20,30);
+
+  requestAnimationFrame(loop);
+}
+
+loop();
+</script>
 </body>
 </html>
