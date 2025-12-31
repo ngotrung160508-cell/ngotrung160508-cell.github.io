@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Đừng Để Cậu Vàng Bị Bắt</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
 body{
   margin:0;
@@ -13,7 +12,6 @@ body{
   justify-content:center;
   align-items:center;
   height:100vh;
-  user-select:none;
 }
 canvas{
   background:linear-gradient(#87ceeb,#fef3c7);
@@ -26,185 +24,197 @@ canvas{
 <canvas id="game" width="1400" height="500"></canvas>
 
 <script>
-/* =========================
+/* ======================
    KHỞI TẠO
-========================= */
+====================== */
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
 const W = canvas.width;
 const H = canvas.height;
 
-const GROUND_Y = 380;
-const GRAVITY = 0.9;
+const GROUND = 380;
+let speed = 7;
+let gameOver = false;
 
-/* =========================
-   CAMERA
-========================= */
-let cameraX = 0;
-
-/* =========================
+/* ======================
    INPUT
-========================= */
-let jumpPressed = false;
-
-document.addEventListener("keydown", e => {
-  if(e.code === "Space") jumpPressed = true;
+====================== */
+let jumpKey = false;
+document.addEventListener("keydown",e=>{
+  if(e.code==="Space") jumpKey = true;
 });
-document.addEventListener("keyup", e => {
-  if(e.code === "Space") jumpPressed = false;
+document.addEventListener("keyup",e=>{
+  if(e.code==="Space") jumpKey = false;
 });
-canvas.addEventListener("click", () => jumpPressed = true);
+canvas.addEventListener("click",()=>jumpKey=true);
 
-/* =========================
+/* ======================
    CẬU VÀNG
-========================= */
+====================== */
 const dog = {
-  x: 200,
-  y: GROUND_Y,
-  w: 90,
-  h: 60,
-  vy: 0,
-  onGround: true,
-  runTime: 0
+  x:180,
+  y:GROUND,
+  w:90,
+  h:60,
+  vy:0,
+  onGround:true,
+  state:"run",
+  t:0
 };
 
-/* =========================
-   VẬT LÝ NHẢY
-========================= */
-function updateDogPhysics(){
-  if(jumpPressed && dog.onGround){
+/* ======================
+   NHẢY CHUẨN DINO
+====================== */
+function updateDog(){
+  if(jumpKey && dog.onGround){
     dog.vy = -18;
     dog.onGround = false;
+    dog.state = "jump";
   }
 
-  dog.vy += GRAVITY;
+  // gravity tăng dần (rơi nhanh)
+  dog.vy += dog.vy < 0 ? 0.9 : 1.2;
   dog.y += dog.vy;
 
-  if(dog.y >= GROUND_Y){
-    dog.y = GROUND_Y;
+  if(dog.y >= GROUND){
+    dog.y = GROUND;
     dog.vy = 0;
     dog.onGround = true;
+    dog.state = "run";
   }
 
-  dog.runTime += 0.15;
+  dog.t += 0.25;
 }
 
-/* =========================
-   VẼ CẬU VÀNG (HOẠT HÌNH)
-========================= */
+/* ======================
+   VẼ CẬU VÀNG
+====================== */
 function drawDog(){
   ctx.save();
-  ctx.translate(dog.x - cameraX, dog.y);
-
-  const run = Math.sin(dog.runTime);
+  ctx.translate(dog.x, dog.y);
+  const run = Math.sin(dog.t);
 
   // thân
-  ctx.fillStyle = "#fbbf24";
+  ctx.fillStyle="#fbbf24";
   ctx.beginPath();
-  ctx.ellipse(0, 0, 45, 28, 0, 0, Math.PI * 2);
+  ctx.ellipse(0,0,45,28,0,0,Math.PI*2);
   ctx.fill();
 
   // đầu
   ctx.beginPath();
-  ctx.ellipse(55, -18, 22, 20, 0, 0, Math.PI * 2);
+  ctx.ellipse(55,-18,22,20,0,0,Math.PI*2);
   ctx.fill();
 
   // tai
-  ctx.fillStyle = "#f59e0b";
+  ctx.fillStyle="#f59e0b";
   ctx.beginPath();
-  ctx.moveTo(48, -45);
-  ctx.lineTo(35, -20);
-  ctx.lineTo(55, -25);
-  ctx.fill();
-
+  ctx.moveTo(48,-45); ctx.lineTo(35,-20); ctx.lineTo(55,-25); ctx.fill();
   ctx.beginPath();
-  ctx.moveTo(62, -45);
-  ctx.lineTo(55, -25);
-  ctx.lineTo(75, -20);
-  ctx.fill();
+  ctx.moveTo(62,-45); ctx.lineTo(55,-25); ctx.lineTo(75,-20); ctx.fill();
 
   // mắt
-  ctx.fillStyle = "#000";
+  ctx.fillStyle="#000";
   ctx.beginPath();
-  ctx.arc(60, -20, 3, 0, Math.PI * 2);
+  ctx.arc(60,-20,3,0,Math.PI*2);
   ctx.fill();
 
-  // chân trước
-  ctx.strokeStyle = "#92400e";
-  ctx.lineWidth = 5;
-  ctx.beginPath();
-  ctx.moveTo(15, 20);
-  ctx.lineTo(15, 20 + run * 10);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(35, 20);
-  ctx.lineTo(35, 20 - run * 10);
-  ctx.stroke();
-
-  // chân sau
-  ctx.beginPath();
-  ctx.moveTo(-15, 20);
-  ctx.lineTo(-15, 20 - run * 10);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(-35, 20);
-  ctx.lineTo(-35, 20 + run * 10);
-  ctx.stroke();
+  // chân
+  ctx.strokeStyle="#92400e";
+  ctx.lineWidth=5;
+  if(dog.state==="run"){
+    ctx.beginPath(); ctx.moveTo(20,20); ctx.lineTo(20,20+run*12); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-20,20); ctx.lineTo(-20,20-run*12); ctx.stroke();
+  }else{
+    ctx.beginPath(); ctx.moveTo(20,20); ctx.lineTo(20,5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-20,20); ctx.lineTo(-20,5); ctx.stroke();
+  }
 
   // đuôi
-  ctx.strokeStyle = "#f59e0b";
-  ctx.lineWidth = 6;
+  ctx.strokeStyle="#f59e0b";
+  ctx.lineWidth=6;
   ctx.beginPath();
-  ctx.moveTo(-45, -10);
-  ctx.quadraticCurveTo(-65, -25 + run * 5, -55, -45);
+  ctx.moveTo(-45,-5);
+  ctx.quadraticCurveTo(-65,-20+run*4,-55,-45);
   ctx.stroke();
 
   ctx.restore();
 }
 
-/* =========================
-   NỀN + MẶT ĐẤT
-========================= */
-function drawBackground(){
-  // mặt đất
-  ctx.fillStyle = "#facc15";
-  ctx.fillRect(0, GROUND_Y + 30, W, H);
+/* ======================
+   CHƯỚNG NGẠI TẾT
+====================== */
+let obstacles = [];
 
-  // đường làng
-  ctx.fillStyle = "#d97706";
-  ctx.fillRect(0, GROUND_Y + 30, W, 8);
+function spawnObstacle(){
+  const type = Math.random()<0.5 ? "banh" : "phao";
+  obstacles.push({
+    type,
+    x:W+40,
+    w:type==="banh"?50:25,
+    h:type==="banh"?40:70
+  });
+}
+setInterval(spawnObstacle,1600);
+
+/* ======================
+   VẼ CHƯỚNG NGẠI
+====================== */
+function drawObstacle(o){
+  if(o.type==="banh"){
+    ctx.fillStyle="#166534";
+    ctx.fillRect(o.x,GROUND+20,o.w,o.h);
+  }else{
+    ctx.fillStyle="#dc2626";
+    ctx.fillRect(o.x,GROUND-10,o.w,o.h);
+  }
 }
 
-/* =========================
-   CAMERA UPDATE
-========================= */
-function updateCamera(){
-  cameraX = dog.x - 200;
+/* ======================
+   VA CHẠM
+====================== */
+function hit(o){
+  return (
+    dog.x+40 > o.x &&
+    dog.x-40 < o.x+o.w &&
+    dog.y+20 > GROUND+20-o.h
+  );
 }
 
-/* =========================
+/* ======================
    GAME LOOP
-========================= */
+====================== */
 function loop(){
   ctx.clearRect(0,0,W,H);
 
-  updateDogPhysics();
-  updateCamera();
+  // nền + đất
+  ctx.fillStyle="#facc15";
+  ctx.fillRect(0,GROUND+30,W,H);
 
-  drawBackground();
+  updateDog();
   drawDog();
 
-  // hướng dẫn
-  ctx.fillStyle="#7c2d12";
-  ctx.font="18px Arial";
-  ctx.fillText("SPACE / CLICK để nhảy",20,30);
+  obstacles.forEach((o,i)=>{
+    o.x -= speed;
+    drawObstacle(o);
+
+    if(hit(o)){
+      gameOver = true;
+    }
+    if(o.x < -60) obstacles.splice(i,1);
+  });
+
+  if(gameOver){
+    ctx.fillStyle="rgba(0,0,0,.7)";
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle="#fff";
+    ctx.font="48px Arial";
+    ctx.fillText("CẬU VÀNG BỊ BẮT 😭",480,240);
+    return;
+  }
 
   requestAnimationFrame(loop);
 }
-
 loop();
 </script>
 </body>
