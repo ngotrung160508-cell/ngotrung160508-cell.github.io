@@ -1,233 +1,179 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vàng Đầu Làng Gym - Dịch vụ chuyên nghiệp</title>
-<style>
-/* RESET & BODY */
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-body{background:#f5f5f5;color:#111;}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym PowerFit</title>
+  <style>
+    /* ===== RESET ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+    body { background: #f5f5f5; color: #111; line-height: 1.6; }
 
-/* HEADER & NAV */
-header{background:#0d47a1;color:#fff;padding:25px;text-align:center;font-size:36px;font-weight:bold;}
-nav{display:flex;justify-content:center;gap:20px;background:#1565c0;padding:14px;flex-wrap:wrap;}
-nav a{text-decoration:none;color:#fff;font-weight:bold;padding:8px 16px;border-radius:6px;transition:0.3s;}
-nav a:hover{background:#ff6f00;color:#fff;cursor:pointer;}
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
 
-/* BANNER */
-.banner{width:100%;height:350px;background:linear-gradient(135deg,#1565c0,#42a5f5);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:36px;font-weight:bold;color:#fff;margin-bottom:40px;border-radius:12px;text-align:center;position:relative;}
-.banner div.subtitle{font-size:22px;margin-top:12px;}
+    /* ===== HEADER ===== */
+    header { background: #1e1e1e; color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 24px; }
+    nav a { margin-left: 20px; font-weight: bold; color: #fff; }
+    nav a:hover { color: #ff6b6b; }
 
-/* CONTAINER */
-.container{max-width:1200px;margin:auto;padding:20px;}
-h2{font-size:32px;color:#0d47a1;text-align:center;margin-bottom:25px;}
-p{font-size:16px;color:#333;text-align:center;margin-bottom:15px;}
+    /* ===== BANNER ===== */
+    .banner { position: relative; height: 400px; background: url('https://images.unsplash.com/photo-1594737625785-9f0c8965a9a3?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat; display: flex; justify-content: center; align-items: center; }
+    .banner h2 { background: rgba(0,0,0,0.5); padding: 20px; color: #fff; font-size: 36px; border-radius: 10px; }
 
-/* SERVICES */
-.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;margin-top:30px;}
-.service{background:white;border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.1);padding:20px;text-align:center;transition:0.3s;cursor:pointer;}
-.service:hover{transform:translateY(-5px);box-shadow:0 0 20px rgba(0,0,0,0.25);}
-.service-icon{font-size:50px;color:#ff6f00;margin-bottom:15px;}
-.service h3{font-size:20px;color:#0d47a1;margin-bottom:10px;}
-.service p{font-size:15px;color:#555;}
+    /* ===== SECTION ===== */
+    section { padding: 60px 20px; max-width: 1200px; margin: auto; }
 
-/* CTA BUTTON */
-.cta{display:block;width:240px;margin:30px auto;padding:14px;background:#ff6f00;color:#fff;text-align:center;font-weight:bold;border-radius:8px;text-decoration:none;transition:0.3s;font-size:18px;}
-.cta:hover{background:#e65100;}
+    h2.section-title { text-align: center; font-size: 32px; margin-bottom: 40px; color: #1e1e1e; }
 
-/* FOOTER */
-footer{background:#0d47a1;color:#fff;text-align:center;padding:25px;margin-top:30px;}
+    /* ===== SERVICES ===== */
+    .services { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 20px; }
+    .service-item { background: #fff; flex: 1 1 250px; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .service-item h3 { margin-bottom: 10px; color: #ff6b6b; }
+    .service-item p { color: #555; }
 
-/* AUTH MODAL */
-.auth-overlay{
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:rgba(0,0,0,.6);display:none;
-  align-items:center;justify-content:center;z-index:9999;
-}
-.auth-box{
-  background:#fff;width:360px;border-radius:12px;
-  padding:25px;text-align:center;
-}
-.auth-box h2{margin-bottom:15px;color:#0d47a1;}
-.auth-box input{
-  width:100%;padding:10px;margin:8px 0;
-  border:1px solid #ccc;border-radius:6px;
-}
-.auth-btn{
-  width:100%;padding:10px;background:#ff6f00;
-  color:#fff;border:none;border-radius:6px;
-  font-weight:bold;cursor:pointer;margin-top:10px;
-}
-.social-btn{
-  margin-top:8px;padding:8px;border-radius:6px;
-  border:1px solid #ddd;cursor:pointer;
-}
-.close-auth{cursor:pointer;color:red;margin-top:10px;}
+    /* ===== TRAINERS ===== */
+    .trainers { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-around; }
+    .trainer { background: #fff; flex: 1 1 250px; border-radius: 10px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
+    .trainer img { border-radius: 50%; margin-bottom: 15px; width: 120px; height: 120px; object-fit: cover; }
+    .trainer h4 { color: #1e1e1e; margin-bottom: 5px; }
+    .trainer p { color: #555; font-size: 14px; }
 
-/* MEDIA */
-@media(max-width:768px){
-  .banner{height:250px;font-size:28px;}
-  .banner div.subtitle{font-size:18px;}
-}
-</style>
+    /* ===== FORM ===== */
+    .form-container { background: #fff; padding: 40px; border-radius: 10px; max-width: 600px; margin: auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .form-container h3 { text-align: center; margin-bottom: 30px; color: #ff6b6b; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+    .form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+    .form-container button { width: 100%; padding: 12px; background: #ff6b6b; color: #fff; font-weight: bold; border: none; border-radius: 5px; cursor: pointer; }
+    .form-container button:hover { background: #e05555; }
 
-<!-- Font Awesome cho icon dịch vụ -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    /* ===== FEEDBACK ===== */
+    .feedbacks { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-around; }
+    .feedback { background: #fff; flex: 1 1 250px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .feedback p { font-style: italic; margin-bottom: 10px; }
+    .feedback span { font-weight: bold; color: #ff6b6b; }
 
+    /* ===== FOOTER ===== */
+    footer { background: #1e1e1e; color: #fff; padding: 30px 20px; text-align: center; }
+    footer a { color: #ff6b6b; margin: 0 10px; }
+    footer a:hover { color: #fff; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .services, .trainers, .feedbacks { flex-direction: column; align-items: center; }
+    }
+  </style>
 </head>
 <body>
 
-<header>Vàng Đầu Làng Gym</header>
-<nav>
-<a href="#home">Trang chủ</a>
-<a href="#services">Dịch vụ</a>
-<a href="#contact">Liên hệ</a>
-<a onclick="openAuth()">Đăng nhập</a>
-</nav>
+  <!-- HEADER -->
+  <header>
+    <h1>Gym PowerFit</h1>
+    <nav>
+      <a href="#services">Dịch vụ</a>
+      <a href="#trainers">Huấn luyện viên</a>
+      <a href="#signup">Đăng ký</a>
+      <a href="#feedback">Phản hồi</a>
+      <a href="#contact">Liên hệ</a>
+    </nav>
+  </header>
 
-<div class="banner" id="home">
-  <div>Vàng Đầu Làng Gym</div>
-  <div class="subtitle">Nâng tầm sức khỏe – Trải nghiệm dịch vụ chuyên nghiệp</div>
-</div>
+  <!-- BANNER -->
+  <div class="banner">
+    <h2>Nâng tầm sức khỏe – Vượt qua giới hạn</h2>
+  </div>
 
-<section id="services" class="container">
-<h2>Dịch vụ của chúng tôi</h2>
-<p>Phòng gym hiện đại, xông hơi, bể bơi và huấn luyện cá nhân – tất cả trong một không gian chuyên nghiệp.</p>
-
-<div class="services">
-  <div class="service">
-    <div class="service-icon"><i class="fas fa-dumbbell"></i></div>
-    <h3>Phòng Gym</h3>
-    <p>Máy tập hiện đại, đa dạng bài tập cho mọi cấp độ.</p>
-  </div>
-  <div class="service">
-    <div class="service-icon"><i class="fas fa-spa"></i></div>
-    <h3>Xông hơi</h3>
-    <p>Hệ thống xông hơi sauna & steam thư giãn, giải tỏa căng thẳng.</p>
-  </div>
-  <div class="service">
-    <div class="service-icon"><i class="fas fa-swimmer"></i></div>
-    <h3>Bể bơi</h3>
-    <p>Bể bơi sạch, hiện đại, phục vụ bơi lội và aqua fitness.</p>
-  </div>
-  <div class="service">
-    <div class="service-icon"><i class="fas fa-running"></i></div>
-    <h3>Cardio</h3>
-    <p>Máy chạy bộ, xe đạp tập, thiết bị cardio tối ưu hiệu quả luyện tập.</p>
-  </div>
-  <div class="service">
-    <div class="service-icon"><i class="fas fa-user-tie"></i></div>
-    <h3>Huấn luyện cá nhân</h3>
-    <p>PT chuyên nghiệp, lập kế hoạch tập luyện theo mục tiêu.</p>
-  </div>
-  <div class="service">
-    <div class="service-icon"><i class="fas fa-yoga"></i></div>
-    <h3>Yoga & Thể dục nhóm</h3>
-    <p>Lớp yoga, zumba, thể dục nhóm giúp nâng cao sức khỏe và tinh thần.</p>
-  </div>
-  <div class="service">
-    <div class="service-icon"><i class="fas fa-heartbeat"></i></div>
-    <h3>Kiểm tra sức khỏe</h3>
-    <p>Đo chỉ số cơ thể, tư vấn dinh dưỡng, theo dõi tiến độ luyện tập.</p>
-  </div>
-  <div class="service">
-    <div class="service-icon"><i class="fas fa-water"></i></div>
-    <h3>Dịch vụ spa & thư giãn</h3>
-    <p>Mát-xa, thư giãn, xả stress sau giờ tập.</p>
-  </div>
-</div>
-<a href="#contact" class="cta">Đăng ký trải nghiệm ngay</a>
-</section>
-
-<section id="contact" class="container">
-<section id="packages" class="container">
-  <h2>Gói tập & Ưu đãi hấp dẫn</h2>
-  <p>Chọn gói tập phù hợp với nhu cầu của bạn và nhận ưu đãi đặc biệt!</p>
-
-  <div class="services">
-    <div class="service">
-      <div class="service-icon"><i class="fas fa-calendar-day"></i></div>
-      <h3>Gói 1 ngày</h3>
-      <p>Giá: 200.000₫ | Trải nghiệm đầy đủ phòng gym, bể bơi và xông hơi trong 1 ngày.</p>
-      <button class="cta" onclick="alert('Đăng ký gói 1 ngày thành công!')">Đăng ký</button>
+  <!-- SERVICES -->
+  <section id="services">
+    <h2 class="section-title">Dịch vụ</h2>
+    <div class="services">
+      <div class="service-item">
+        <h3>Tập Gym Cơ Bản</h3>
+        <p>Hướng dẫn từng bước cho người mới, phòng tập đầy đủ thiết bị hiện đại.</p>
+      </div>
+      <div class="service-item">
+        <h3>Huấn Luyện Cá Nhân</h3>
+        <p>HLV chuyên nghiệp kèm 1-1 giúp đạt mục tiêu nhanh nhất.</p>
+      </div>
+      <div class="service-item">
+        <h3>Lớp Nhóm & Yoga</h3>
+        <p>Lớp HIIT, Yoga, Group Training – tăng sức bền và giảm stress.</p>
+      </div>
     </div>
-    <div class="service">
-      <div class="service-icon"><i class="fas fa-calendar-week"></i></div>
-      <h3>Gói 1 tháng</h3>
-      <p>Giá: 1.500.000₫ | Tặng 1 buổi huấn luyện cá nhân + 10% voucher dịch vụ spa.</p>
-      <button class="cta" onclick="alert('Đăng ký gói 1 tháng thành công!')">Đăng ký</button>
+  </section>
+
+  <!-- TRAINERS -->
+  <section id="trainers">
+    <h2 class="section-title">Huấn luyện viên</h2>
+    <div class="trainers">
+      <div class="trainer">
+        <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=800&q=80" alt="HLV 1">
+        <h4>Nguyễn Văn A</h4>
+        <p>HLV Gym Chứng chỉ quốc tế, chuyên tăng cơ giảm mỡ.</p>
+      </div>
+      <div class="trainer">
+        <img src="https://images.unsplash.com/photo-1594737625785-9f0c8965a9a3?auto=format&fit=crop&w=800&q=80" alt="HLV 2">
+        <h4>Trần Thị B</h4>
+        <p>HLV Yoga & HIIT, chuyên hướng dẫn lớp nhóm và cá nhân.</p>
+      </div>
     </div>
-    <div class="service">
-      <div class="service-icon"><i class="fas fa-calendar"></i></div>
-      <h3>Gói 3 tháng</h3>
-      <p>Giá: 4.000.000₫ | Tặng 2 buổi PT cá nhân + 15% voucher dịch vụ spa & xông hơi.</p>
-      <button class="cta" onclick="alert('Đăng ký gói 3 tháng thành công!')">Đăng ký</button>
+  </section>
+
+  <!-- SIGNUP FORM -->
+  <section id="signup">
+    <h2 class="section-title">Đăng ký tập thử</h2>
+    <div class="form-container">
+      <h3>Đăng ký ngay</h3>
+      <form>
+        <div class="form-group">
+          <label for="name">Họ và tên</label>
+          <input type="text" id="name" placeholder="Nhập họ và tên" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Số điện thoại</label>
+          <input type="tel" id="phone" placeholder="Nhập số điện thoại" required>
+        </div>
+        <div class="form-group">
+          <label for="service">Chọn dịch vụ</label>
+          <select id="service" required>
+            <option value="">-- Chọn dịch vụ --</option>
+            <option value="basic">Tập Gym Cơ Bản</option>
+            <option value="personal">Huấn Luyện Cá Nhân</option>
+            <option value="group">Lớp Nhóm & Yoga</option>
+          </select>
+        </div>
+        <button type="submit">Đăng ký tập thử</button>
+      </form>
     </div>
-    <div class="service">
-      <div class="service-icon"><i class="fas fa-calendar-check"></i></div>
-      <h3>Gói 1 năm</h3>
-      <p>Giá: 15.000.000₫ | Tặng 1 tháng miễn phí + 20% voucher dịch vụ spa & xông hơi + ưu tiên đăng ký lớp nhóm.</p>
-      <button class="cta" onclick="alert('Đăng ký gói 1 năm thành công!')">Đăng ký</button>
+  </section>
+
+  <!-- FEEDBACK -->
+  <section id="feedback">
+    <h2 class="section-title">Phản hồi khách hàng</h2>
+    <div class="feedbacks">
+      <div class="feedback">
+        <p>"Phòng gym rất hiện đại, HLV tận tâm. Tôi đã giảm 5kg sau 2 tháng!"</p>
+        <span>- Nguyễn Văn C</span>
+      </div>
+      <div class="feedback">
+        <p>"Các lớp nhóm vui và năng động, giúp tôi giảm stress sau giờ làm."</p>
+        <span>- Lê Thị D</span>
+      </div>
     </div>
-  </div>
-</section>
-<h2>Liên hệ</h2>
-<p style="text-align:center;font-size:18px;">Hotline: 0976427208 | Email: info@vangdaulanggym.com</p>
-<p style="text-align:center;font-size:16px;">Địa chỉ: Ô 12, Lô 1, Đền Lừ 1, Phường Tương Mai, Hà Nội</p>
-</section>
+  </section>
 
-<footer>
-© 2026 Vàng Đầu Làng Gym – Nâng tầm sức khỏe
-</footer>
-
-<!-- ================= AUTH MODAL ================= -->
-<div class="auth-overlay" id="auth">
-  <div class="auth-box">
-    <h2 id="authTitle">Đăng nhập</h2>
-    <input id="username" placeholder="Tên tài khoản">
-    <input id="password" type="password" placeholder="Mật khẩu">
-    <button class="auth-btn" onclick="submitAuth()">Xác nhận</button>
-
-    <div class="social-btn">🔵 Đăng nhập Google (demo)</div>
-    <div class="social-btn">🔷 Facebook (demo)</div>
-    <div class="social-btn">🟢 Zalo (demo)</div>
-
-    <p onclick="toggleAuth()" style="cursor:pointer;margin-top:10px">
-      Chưa có tài khoản? / Đã có tài khoản
+  <!-- FOOTER -->
+  <footer id="contact">
+    <p>Gym PowerFit – 123 Đường Sức Khỏe, TP.HCM</p>
+    <p>Hotline: <a href="tel:0901234567">0901234567</a> | Email: <a href="mailto:info@gympowerfit.vn">info@gympowerfit.vn</a></p>
+    <p>
+      Theo dõi chúng tôi:
+      <a href="#">Facebook</a> | <a href="#">Instagram</a> | <a href="#">TikTok</a>
     </p>
-    <div class="close-auth" onclick="closeAuth()">Đóng</div>
-  </div>
-</div>
-
-<script>
-let isLogin=true;
-
-function openAuth(){document.getElementById('auth').style.display='flex'}
-function closeAuth(){document.getElementById('auth').style.display='none'}
-
-function toggleAuth(){
-  isLogin=!isLogin;
-  document.getElementById('authTitle').innerText=isLogin?'Đăng nhập':'Đăng ký';
-}
-
-function submitAuth(){
-  let u=username.value,p=password.value;
-  if(!u||!p){alert("Nhập đủ thông tin");return;}
-  if(isLogin){
-    let data=JSON.parse(localStorage.getItem(u));
-    if(data&&data.password===p){
-      localStorage.setItem("logged",u);
-      alert("Đăng nhập thành công");
-      closeAuth();
-    }else alert("Sai thông tin");
-  }else{
-    localStorage.setItem(u,JSON.stringify({password:p}));
-    alert("Tạo tài khoản thành công");
-    toggleAuth();
-  }
-}
-</script>
+    <p>&copy; 2026 Gym PowerFit. Bảo lưu mọi quyền.</p>
+  </footer>
 
 </body>
 </html>
