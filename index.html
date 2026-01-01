@@ -1,53 +1,103 @@
-using UnityEngine;
-using UnityEngine.EventSystems;
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Shape Fun - Game xếp hình cho bé</title>
+<style>
+  body {
+    font-family: sans-serif;
+    text-align: center;
+    background-color: #fdf6e3;
+  }
+  h1 {
+    color: #ff6f61;
+  }
+  .game-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  .slot, .shape {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .slot {
+    border: 3px dashed #aaa;
+    border-radius: 10px;
+  }
+  .shape {
+    cursor: grab;
+  }
+  .circle { background-color: #ff0000; border-radius: 50%; }
+  .square { background-color: #00aa00; }
+  .triangle {
+    width: 0; 
+    height: 0; 
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-bottom: 100px solid #0000ff;
+    background: none;
+  }
+  .correct {
+    border: 3px solid #00aa00 !important;
+  }
+</style>
+</head>
+<body>
 
-public class ShapeDragDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
-{
-    private Vector3 startPos;
-    private CanvasGroup canvasGroup;
+<h1>Shape Fun</h1>
+<p>Kéo hình vào lỗ đúng!</p>
 
-    // Gán hình đúng lỗ này trong Inspector
-    public Transform targetSlot; 
-    public AudioClip correctSound;
-    public AudioClip wrongSound;
+<div class="game-container" id="slots">
+  <div class="slot" data-shape="circle"></div>
+  <div class="slot" data-shape="square"></div>
+  <div class="slot" data-shape="triangle"></div>
+</div>
 
-    private AudioSource audioSource;
+<div class="game-container" id="shapes">
+  <div class="shape circle" draggable="true" id="circle"></div>
+  <div class="shape square" draggable="true" id="square"></div>
+  <div class="shape triangle" draggable="true" id="triangle"></div>
+</div>
 
-    void Awake()
-    {
-        canvasGroup = gameObject.AddComponent<CanvasGroup>();
-        startPos = transform.position;
-        audioSource = gameObject.AddComponent<AudioSource>();
-    }
+<script>
+const shapes = document.querySelectorAll('.shape');
+const slots = document.querySelectorAll('.slot');
 
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        startPos = transform.position;
-        canvasGroup.blocksRaycasts = false;
-    }
+shapes.forEach(shape => {
+  shape.addEventListener('dragstart', dragStart);
+});
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        transform.position = eventData.position;
-    }
+slots.forEach(slot => {
+  slot.addEventListener('dragover', dragOver);
+  slot.addEventListener('drop', dropShape);
+});
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        canvasGroup.blocksRaycasts = true;
+let draggedShape = null;
 
-        // Kiểm tra khoảng cách với lỗ
-        float distance = Vector3.Distance(transform.position, targetSlot.position);
-        if(distance < 50f) // khoảng cách hợp lệ để đặt đúng
-        {
-            transform.position = targetSlot.position;
-            audioSource.PlayOneShot(correctSound);
-            Debug.Log("Đúng hình!");
-        }
-        else
-        {
-            transform.position = startPos;
-            audioSource.PlayOneShot(wrongSound);
-            Debug.Log("Sai hình, thử lại!");
-        }
-    }
+function dragStart(e) {
+  draggedShape = e.target;
 }
+
+function dragOver(e) {
+  e.preventDefault();
+}
+
+function dropShape(e) {
+  const slotShape = e.target.dataset.shape;
+  if (draggedShape.id === slotShape) {
+    e.target.appendChild(draggedShape);
+    draggedShape.style.position = "static";
+    e.target.classList.add('correct');
+    alert("Đúng hình! 🎉");
+  } else {
+    alert("Sai hình, thử lại!");
+  }
+}
+</script>
+
+</body>
+</html>
