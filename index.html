@@ -2,30 +2,51 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Album Của Tôi</title>
+    <title>My Photo Gallery</title>
     <style>
-        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; padding: 20px; }
-        .gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
-        img, video { width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
-        h1 { color: #00d4ff; }
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .gallery img {
+            width: 200px;
+            height: auto;
+            border: 2px solid #333;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .gallery img:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
-    <h1>Khoảnh Khắc Của Tôi</h1>
-    
+    <h1>My Photo Gallery</h1>
     <div class="gallery">
-        <div class="item">
-            <img src="ten-anh-cua-ban.jpg" alt="Mô tả ảnh">
-            <p>Kỷ niệm ngày hè</p>
-        </div>
-
-        <div class="item">
-            <video controls>
-                <source src="ten-video-cua-ban.mp4" type="video/mp4">
-                Trình duyệt của bạn không hỗ trợ video.
-            </video>
-            <p>Video chuyến đi Đà Lạt</p>
-        </div>
+        <img src="https://via.placeholder.com/200x150.png?text=Photo1" alt="Photo 1">
+        <img src="https://via.placeholder.com/200x150.png?text=Photo2" alt="Photo 2">
+        <img src="https://via.placeholder.com/200x150.png?text=Photo3" alt="Photo 3">
     </div>
+    <script>
+        // Khi click vào ảnh sẽ mở ảnh lớn
+        const images = document.querySelectorAll('.gallery img');
+        images.forEach(img => {
+            img.addEventListener('click', () => {
+                window.open(img.src, '_blank');
+            });
+        });
+    </script>
 </body>
 </html>
