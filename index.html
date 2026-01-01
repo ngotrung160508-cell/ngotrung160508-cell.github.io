@@ -1,52 +1,67 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <title>My Photo Gallery</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f0f0f0;
-        }
-        h1 {
-            margin-top: 20px;
-        }
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .gallery img {
-            width: 200px;
-            height: auto;
-            border: 2px solid #333;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .gallery img:hover {
-            transform: scale(1.1);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Mini Photo Gallery</title>
+  <style>
+    body { font-family: Arial; text-align: center; background: #f0f0f0; }
+    h1 { margin-top: 20px; }
+    .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+    .gallery img { width: 200px; border: 2px solid #333; border-radius: 5px; cursor: pointer; }
+    input[type="file"] { margin-top: 20px; }
+  </style>
 </head>
 <body>
-    <h1>My Photo Gallery</h1>
-    <div class="gallery">
-        <img src="file:///C:/Users/ngotr/Downloads/609684151_654215647778509_8927494713710180634_n.jpg">
-        <img src="https://via.placeholder.com/200x150.png?text=Photo2" alt="Photo 2">
-        <img src="https://via.placeholder.com/200x150.png?text=Photo3" alt="Photo 3">
-    </div>
-    <script>
-        // Khi click vào ảnh sẽ mở ảnh lớn
-        const images = document.querySelectorAll('.gallery img');
-        images.forEach(img => {
-            img.addEventListener('click', () => {
-                window.open(img.src, '_blank');
-            });
+  <h1>Mini Photo Gallery</h1>
+  <input type="file" id="fileButton" />
+  <div class="gallery" id="gallery"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "API_KEY",
+      authDomain: "PROJECT_ID.firebaseapp.com",
+      projectId: "PROJECT_ID",
+      storageBucket: "PROJECT_ID.appspot.com",
+      messagingSenderId: "SENDER_ID",
+      appId: "APP_ID"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const storage = firebase.storage();
+
+    const fileButton = document.getElementById('fileButton');
+    const gallery = document.getElementById('gallery');
+
+    // Khi người dùng chọn file
+    fileButton.addEventListener('change', e => {
+      const file = e.target.files[0];
+      const storageRef = storage.ref('photos/' + file.name);
+      storageRef.put(file).then(() => {
+        alert('Upload thành công!');
+        displayPhotos();
+      });
+    });
+
+    // Hiển thị ảnh
+    function displayPhotos() {
+      storage.ref('photos/').listAll().then(res => {
+        gallery.innerHTML = '';
+        res.items.forEach(itemRef => {
+          itemRef.getDownloadURL().then(url => {
+            const img = document.createElement('img');
+            img.src = url;
+            gallery.appendChild(img);
+          });
         });
-    </script>
+      });
+    }
+
+    displayPhotos(); // load ảnh khi mở web
+  </script>
 </body>
 </html>
