@@ -3,194 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tổng Tài Group</title>
+<title>Typing Challenge Online</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
-/* ===== RESET & BODY ===== */
-body{font-family:Arial,sans-serif;background:#fff3e0;margin:0;}
-header{background:#c62828;color:#fff;padding:15px;text-align:center;font-size:28px;font-weight:bold;position:sticky;top:0;z-index:100;box-shadow:0 3px 8px rgba(0,0,0,0.2);}
-.container{max-width:700px;margin:20px auto;padding:0 10px;}
-.post-form{background:#fff;padding:15px;border-radius:12px;box-shadow:0 3px 8px rgba(0,0,0,0.15);margin-bottom:20px;}
-.post-form textarea,input[type=text]{width:100%;padding:10px;margin-bottom:10px;border-radius:5px;border:1px solid #ccc;resize:none;}
-.post-form input[type=file]{margin-bottom:10px;}
-.post-form button{padding:10px 15px;background:#d32f2f;color:#fff;border:none;border-radius:5px;cursor:pointer;transition:0.3s;font-weight:bold;}
-.post-form button:hover{background:#b71c1c;}
-.feed{list-style:none;padding:0;}
-.post{background:#fff;margin-bottom:20px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.15);padding:12px;opacity:0;transform:translateY(20px);transition:0.5s;}
-.post.visible{opacity:1;transform:translateY(0);}
-.post-header{display:flex;justify-content:space-between;align-items:center;}
-.post-header h4{margin:0;color:#d32f2f;font-weight:bold;}
-.post-header small{color:#555;font-size:12px;}
-.post-header button{background:#e05555;color:#fff;border:none;padding:3px 7px;border-radius:4px;cursor:pointer;display:none;}
-.post.admin .post-header button{display:block;}
-.post-content{margin:10px 0;}
-.post-content img{max-width:100%;border-radius:8px;margin-top:10px;}
-.post-actions{display:flex;gap:15px;font-size:14px;color:#555;margin-bottom:5px;}
-.post-actions button{background:none;border:none;cursor:pointer;font-size:14px;}
-.like-count{margin-left:5px;}
-.comments{margin-top:10px;padding-left:10px;}
-.comment{background:#fff8e1;padding:5px 8px;border-radius:8px;margin-bottom:5px;position:relative;box-shadow:0 1px 4px rgba(0,0,0,0.1);}
-.comment h5{margin:0;font-size:13px;color:#d32f2f;font-weight:bold;}
-.comment p{margin:2px 0;font-size:13px;}
-.comment .delete-btn{position:absolute;top:5px;right:5px;background:#e05555;color:#fff;border:none;padding:2px 5px;border-radius:5px;cursor:pointer;display:none;}
-.comment.admin .delete-btn{display:block;}
-.comment-input{display:flex;gap:5px;margin-top:5px;}
-.comment-input input{flex:1;padding:5px;border-radius:5px;border:1px solid #ccc;}
-.comment-input button{padding:5px 10px;background:#d32f2f;color:#fff;border:none;border-radius:5px;cursor:pointer;font-weight:bold;}
-.comment-input button:hover{background:#b71c1c;}
-
-/* Tết theme background */
-body::before{
-  content:"";
-  position:fixed;top:0;left:0;width:100%;height:100%;
-  background:url('https://cdn.pixabay.com/photo/2017/01/20/00/30/fireworks-1994828_1280.jpg') center/cover no-repeat;
-  opacity:0.1;z-index:-1;
-}
+body { font-family: Arial; background:#222; color:#fff; text-align:center; }
+#game-container { max-width:600px; margin:20px auto; padding:10px; background:#333; border-radius:10px;}
+textarea { width:100%; height:100px; font-size:18px; }
+#text-display { font-size:18px; background:#444; padding:10px; border-radius:5px; min-height:100px; margin-bottom:10px; }
+#scoreboard { margin-top:10px; background:#444; padding:10px; border-radius:5px; text-align:left; max-height:200px; overflow-y:auto;}
+button { padding:10px 20px; font-size:16px; margin:5px; }
+.correct { color:lime; }
+.incorrect { color:red; }
 </style>
 </head>
 <body>
-
-<header>Tổng Tài Group</header>
-
-<div class="container">
-
-<!-- Form đăng bài -->
-<div class="post-form">
-<textarea id="postContent" rows="3" placeholder="Viết bài tập, mẹo gym, chia sẻ kèm ảnh..."></textarea>
-<input type="text" id="username" placeholder="Tên của bạn (hoặc Admin)">
-<input type="file" id="postImage" accept="image/*">
-<button id="postBtn">Đăng bài</button>
-</div>
-
-<!-- Feed -->
-<ul class="feed" id="feedList"></ul>
-
+<h1>Typing Challenge Online</h1>
+<div id="game-container">
+  <div id="text-display"></div>
+  <textarea id="input-text" placeholder="Gõ văn bản ở đây..."></textarea><br>
+  <button id="start-btn">Bắt đầu</button>
+  <p>Thời gian: <span id="timer">60</span>s | Điểm: <span id="score">0</span> | WPM: <span id="wpm">0</span></p>
+  <div id="scoreboard"><b>Bảng xếp hạng:</b><br></div>
 </div>
 
 <script>
-// ===== Lưu data =====
-let feed = JSON.parse(localStorage.getItem('TTGFeed')) || [];
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
 
-// ===== Render feed =====
-function renderFeed(){
-  const feedList = document.getElementById('feedList');
-  feedList.innerHTML = '';
-  feed.forEach((post,index)=>{
-    const postEl = document.createElement('li');
-    postEl.classList.add('post');
-    if(post.username.toLowerCase()==='admin') postEl.classList.add('admin');
-    setTimeout(()=>postEl.classList.add('visible'),50);
-    let timeStr = new Date(post.time).toLocaleString('vi-VN',{hour12:false});
-    postEl.innerHTML = `
-      <div class="post-header">
-        <h4>${post.username}</h4>
-        <small>${timeStr}</small>
-        ${post.username.toLowerCase()==='admin'? `<button onclick="deletePost(${index})">Xóa</button>`: ''}
-      </div>
-      <div class="post-content">
-        ${post.content.replace(/\n/g,'<br>')}
-        ${post.image?`<img src="${post.image}" />`:''}
-      </div>
-      <div class="post-actions">
-        <button onclick="toggleLike(${index})">${post.likes.includes('user')?'❤️':'🤍'} Thích</button>
-        <span class="like-count">${post.likes.length}</span>
-      </div>
-      <div class="comments">
-        ${post.comments.map((c,i)=>`
-          <div class="comment ${c.username.toLowerCase()==='admin'?'admin':''}">
-            <h5>${c.username}</h5>
-            <p>${c.content}</p>
-            ${c.username.toLowerCase()==='admin'? `<button class="delete-btn" onclick="deleteComment(${index},${i})">Xóa</button>`: ''}
-          </div>
-        `).join('')}
-        <div class="comment-input">
-          <input type="text" placeholder="Bình luận..." onkeypress="addComment(event,${index})">
-          <button onclick="addCommentBtn(${index})">Gửi</button>
-        </div>
-      </div>
-    `;
-    feedList.appendChild(postEl);
-  });
-}
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-// ===== Đăng bài =====
-document.getElementById('postBtn').addEventListener('click', ()=>{
-  const content = document.getElementById('postContent').value.trim();
-  const username = document.getElementById('username').value.trim() || 'Người dùng';
-  const imageInput = document.getElementById('postImage');
-  if(!content && !imageInput.files[0]) return alert('Nhập nội dung hoặc ảnh!');
-  
-  let reader = new FileReader();
-  reader.onload = function(e){
-    feed.unshift({username,content,image:e.target.result||'',likes:[],comments:[],time:Date.now()});
-    localStorage.setItem('TTGFeed', JSON.stringify(feed));
-    document.getElementById('postContent').value='';
-    document.getElementById('username').value='';
-    document.getElementById('postImage').value='';
-    renderFeed();
-  }
-  if(imageInput.files[0]){
-    reader.readAsDataURL(imageInput.files[0]);
-  } else {
-    reader.onload({target:{result:''}});
-  }
+// Game variables
+let textToType = "";
+let timer = 60;
+let interval;
+let started = false;
+let score = 0;
+let charsTyped = 0;
+
+// Sample texts
+const texts = [
+  "Block Blast là game xếp hình thú vị và thư giãn.",
+  "Gõ nhanh và đúng chính tả để ghi nhiều điểm nhất.",
+  "Typing Challenge giúp cải thiện tốc độ gõ bàn phím.",
+  "Hãy thử thách bản thân và trở thành người nhanh nhất!"
+];
+
+// Elements
+const textDisplay = document.getElementById('text-display');
+const inputText = document.getElementById('input-text');
+const startBtn = document.getElementById('start-btn');
+const timerEl = document.getElementById('timer');
+const scoreEl = document.getElementById('score');
+const wpmEl = document.getElementById('wpm');
+const scoreboard = document.getElementById('scoreboard');
+
+// Start game
+startBtn.addEventListener('click', ()=>{
+  startGame();
 });
 
-// ===== Xóa bài (admin) =====
-function deletePost(index){
-  if(confirm('Xác nhận xóa bài?')){
-    feed.splice(index,1);
-    localStorage.setItem('TTGFeed', JSON.stringify(feed));
-    renderFeed();
-  }
-}
-
-// ===== Like/Dislike =====
-function toggleLike(index){
-  let post = feed[index];
-  if(post.likes.includes('user')) post.likes = post.likes.filter(u=>'user'!==u);
-  else post.likes.push('user');
-  localStorage.setItem('TTGFeed', JSON.stringify(feed));
-  renderFeed();
-}
-
-// ===== Bình luận =====
-function addComment(e, postIndex){
-  if(e.key==='Enter'){
-    const input = e.target;
-    const commentText = input.value.trim();
-    const username = prompt('Tên của bạn:','Người dùng');
-    if(commentText && username){
-      feed[postIndex].comments.push({username,content:commentText});
-      localStorage.setItem('TTGFeed', JSON.stringify(feed));
-      input.value='';
-      renderFeed();
+function startGame(){
+  started = true;
+  timer = 60;
+  score = 0;
+  charsTyped = 0;
+  timerEl.textContent = timer;
+  scoreEl.textContent = score;
+  wpmEl.textContent = 0;
+  inputText.value = "";
+  textToType = texts[Math.floor(Math.random()*texts.length)];
+  displayText();
+  inputText.focus();
+  
+  clearInterval(interval);
+  interval = setInterval(()=>{
+    timer--;
+    timerEl.textContent = timer;
+    updateScore();
+    if(timer<=0){
+      endGame();
     }
-  }
-}
-function addCommentBtn(postIndex){
-  const input = document.querySelectorAll('.post')[postIndex].querySelector('.comment-input input');
-  const commentText = input.value.trim();
-  const username = prompt('Tên của bạn:','Người dùng');
-  if(commentText && username){
-    feed[postIndex].comments.push({username,content:commentText});
-    localStorage.setItem('TTGFeed', JSON.stringify(feed));
-    input.value='';
-    renderFeed();
-  }
+  },1000);
 }
 
-// ===== Xóa bình luận (admin) =====
-function deleteComment(postIndex, commentIndex){
-  if(confirm('Xác nhận xóa bình luận?')){
-    feed[postIndex].comments.splice(commentIndex,1);
-    localStorage.setItem('TTGFeed', JSON.stringify(feed));
-    renderFeed();
+function displayText(){
+  let html = "";
+  for(let i=0;i<textToType.length;i++){
+    html += `<span id="char${i}">${textToType[i]}</span>`;
   }
+  textDisplay.innerHTML = html;
 }
 
-// ===== Render lần đầu =====
-renderFeed();
+// Update score
+inputText.addEventListener('input',()=>{
+  if(!started) return;
+  let input = inputText.value;
+  charsTyped = 0;
+  for(let i=0;i<textToType.length;i++){
+    let charSpan = document.getElementById('char'+i);
+    if(i<input.length){
+      if(input[i]===textToType[i]){
+        charSpan.className="correct";
+        charsTyped++;
+      } else charSpan.className="incorrect";
+    } else charSpan.className="";
+  }
+  score = charsTyped;
+  scoreEl.textContent = score;
+  wpmEl.textContent = Math.round((charsTyped/5)/(60-timer+1)*60);
+});
+
+function updateScore(){
+  wpmEl.textContent = Math.round((charsTyped/5)/(60-timer+1)*60);
+}
+
+// End game
+function endGame(){
+  started=false;
+  clearInterval(interval);
+  alert("Kết thúc! Điểm: "+score+" | WPM: "+wpmEl.textContent);
+  let username = prompt("Nhập tên của bạn:");
+  if(username){
+    let entry = {
+      name: username,
+      score: score,
+      wpm: wpmEl.textContent,
+      timestamp: new Date().toISOString()
+    };
+    db.ref('leaderboard').push(entry);
+  }
+  inputText.value="";
+}
+
+// Realtime leaderboard
+db.ref('leaderboard').on('value',(snapshot)=>{
+  let data = snapshot.val();
+  if(!data) return;
+  let arr = Object.values(data);
+  arr.sort((a,b)=>b.score-a.score);
+  let html = "<b>Bảng xếp hạng:</b><br>";
+  arr.forEach((item,i)=>{
+    html += `${i+1}. ${item.name} - Điểm: ${item.score} | WPM: ${item.wpm} | ${new Date(item.timestamp).toLocaleString()}<br>`;
+  });
+  scoreboard.innerHTML = html;
+});
+
 </script>
-
 </body>
 </html>
