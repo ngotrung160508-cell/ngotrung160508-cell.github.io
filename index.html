@@ -5,79 +5,87 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vàng Đầu Làng Gym</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
-body{background:#f5f5f5;color:#111;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:#f4f4f5;color:#111;}
 header{background:#0d47a1;color:#fff;padding:20px;text-align:center;font-size:32px;font-weight:bold;}
 nav{display:flex;justify-content:center;gap:20px;background:#1565c0;padding:12px;}
 nav a{text-decoration:none;color:#fff;font-weight:bold;padding:6px 12px;border-radius:5px;transition:0.3s;}
 nav a:hover{background:#ff6f00;color:#fff;}
-.banner{width:100%;height:300px;background:linear-gradient(to right,#1565c0,#42a5f5);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:bold;color:#fff;margin-bottom:30px;border-radius:10px;text-align:center;}
+.banner{width:100%;height:350px;background:linear-gradient(to right,#1565c0,#42a5f5);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:36px;font-weight:bold;color:#fff;margin-bottom:30px;border-radius:10px;text-align:center;position:relative;}
+.banner img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.3;border-radius:10px;}
 .container{max-width:1200px;margin:auto;padding:20px;}
-section{margin-bottom:50px;}
 h2{font-size:28px;color:#0d47a1;text-align:center;margin-bottom:20px;}
+p{font-size:16px;color:#333;text-align:center;margin-bottom:15px;}
 .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;}
 .product{background:white;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);padding:15px;text-align:center;transition:0.3s;cursor:pointer;}
 .product:hover{transform:scale(1.05);box-shadow:0 0 15px rgba(0,0,0,0.3);}
 .product img{width:100%;border-radius:10px;height:150px;object-fit:cover;}
 .product h3{margin:10px 0 5px;font-size:18px;color:#0d47a1;}
-.product p{font-size:14px;color:#555;margin-bottom:5px;}
-.cta{display:block;width:200px;margin:20px auto;padding:12px;background:#ff6f00;color:#fff;text-align:center;font-weight:bold;border-radius:6px;text-decoration:none;transition:0.3s;}
+.product p{font-size:14px;color:#555;}
+.cta{display:block;width:220px;margin:20px auto;padding:12px;background:#ff6f00;color:#fff;text-align:center;font-weight:bold;border-radius:6px;text-decoration:none;transition:0.3s;}
 .cta:hover{background:#e65100;}
 footer{background:#0d47a1;color:#fff;text-align:center;padding:20px;margin-top:30px;}
+section{margin-bottom:50px;}
 </style>
 </head>
 <body>
+
 <header>Vàng Đầu Làng Gym</header>
 <nav>
 <a href="#home">Trang chủ</a>
-<a href="#products">Sản phẩm</a>
+<a href="#intro">Giới thiệu</a>
+<a href="#products">Dụng cụ</a>
 <a href="#contact">Liên hệ</a>
 </nav>
 
 <div class="banner" id="home">
-  Nâng tầm sức khỏe – Chọn thiết bị tốt nhất cho gym của bạn!
+<img src="https://via.placeholder.com/1200x350.png?text=Vàng+Đầu+Làng+Gym+Banner" alt="Banner Gym">
+<div>Vàng Đầu Làng Gym</div>
+<div style="font-size:20px;margin-top:10px;">Nâng tầm sức khỏe – Phòng gym hiện đại tại Hà Nội</div>
 </div>
 
 <section id="intro" class="container">
-  <h2>Giới thiệu thương hiệu</h2>
-  <p style="text-align:center;font-size:18px;">Vàng Đầu Làng Gym cung cấp đầy đủ các thiết bị, dụng cụ tập luyện chất lượng cao, từ máy tập chuyên nghiệp đến tạ, thảm và phụ kiện gym. Đem đến trải nghiệm tập luyện an toàn, hiệu quả và hiện đại.</p>
+<h2>Giới thiệu phòng gym</h2>
+<p>Vàng Đầu Làng Gym – địa chỉ tin cậy cho người yêu thể thao tại Ô 12, Lô 1, Đền Lừ 1, Phường Tương Mai, Hà Nội. Chúng tôi cung cấp các thiết bị tập luyện hiện đại, phòng ốc rộng rãi và huấn luyện viên chuyên nghiệp.</p>
+<p>Tham gia ngay để nâng cao sức khỏe, tăng cơ bắp và trải nghiệm môi trường tập luyện năng động.</p>
 </section>
 
 <section id="products" class="container">
-<h2>Sản phẩm nổi bật</h2>
+<h2>Dụng cụ và thiết bị gym</h2>
 <div class="products">
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Chạy+Bộ" alt="Máy Chạy Bộ"><h3>Máy Chạy Bộ</h3><p>Chất lượng cao, động cơ mạnh mẽ.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Tạ+Đòn" alt="Tạ Đòn"><h3>Tạ Đòn</h3><p>Nhiều trọng lượng, phù hợp tập gym.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Ghế+Tạ" alt="Ghế Tạ"><h3>Ghế Tạ Đa Năng</h3><p>Ghế tập đa năng, điều chỉnh dễ dàng.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Dây+Kháng+Lực" alt="Dây Kháng Lực"><h3>Dây Kháng Lực</h3><p>Đa cấp độ, bền bỉ.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Thảm+Tập" alt="Thảm Tập"><h3>Thảm Tập Yoga</h3><p>Mềm mại, chống trượt.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Xe+Đạp+Tập" alt="Xe Đạp Tập"><h3>Xe Đạp Tập</h3><p>Đơn giản, hiệu quả cardio.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Kettlebell" alt="Kettlebell"><h3>Kettlebell</h3><p>Đa trọng lượng, bền chắc.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Bóng+Tập" alt="Bóng Tập"><h3>Bóng Tập Gym</h3><p>Dùng cho yoga và core.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Tập+Ngực" alt="Máy Tập Ngực"><h3>Máy Tập Ngực</h3><p>Thiết kế chuyên nghiệp, dễ sử dụng.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Tập+Cơ+Chân" alt="Máy Tập Chân"><h3>Máy Tập Chân</h3><p>Giúp phát triển cơ bắp mạnh mẽ.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Đai+Tập+Lưng" alt="Đai Tập Lưng"><h3>Đai Tập Lưng</h3><p>Hỗ trợ cột sống, an toàn tập luyện.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Chạy+Bộ" alt="Máy Chạy Bộ"><h3>Máy Chạy Bộ</h3><p>Động cơ mạnh mẽ, bền bỉ, hỗ trợ cardio.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Tạ+Đòn" alt="Tạ Đòn"><h3>Tạ Đòn</h3><p>Nhiều trọng lượng, chất liệu thép cao cấp.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Ghế+Tạ" alt="Ghế Tạ"><h3>Ghế Tạ Đa Năng</h3><p>Điều chỉnh linh hoạt, phù hợp mọi bài tập.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Dây+Kháng+Lực" alt="Dây Kháng Lực"><h3>Dây Kháng Lực</h3><p>Đa cấp độ, bền bỉ, rèn sức mạnh.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Thảm+Tập" alt="Thảm Tập"><h3>Thảm Yoga</h3><p>Mềm mại, chống trượt, thoải mái luyện tập.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Xe+Đạp+Tập" alt="Xe Đạp Tập"><h3>Xe Đạp Tập</h3><p>Đơn giản, hỗ trợ cardio hiệu quả.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Kettlebell" alt="Kettlebell"><h3>Kettlebell</h3><p>Đa trọng lượng, tập tay và core.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Bóng+Tập" alt="Bóng Tập"><h3>Bóng Tập Gym</h3><p>Dùng cho yoga, core, tăng độ linh hoạt.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Tập+Ngực" alt="Máy Tập Ngực"><h3>Máy Tập Ngực</h3><p>Phát triển cơ ngực, dễ sử dụng.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Tập+Chân" alt="Máy Tập Chân"><h3>Máy Tập Chân</h3><p>Phát triển cơ chân, độ bền cao.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Đai+Tập+Lưng" alt="Đai Lưng"><h3>Đai Tập Lưng</h3><p>Hỗ trợ cột sống, an toàn luyện tập.</p></div>
   <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Găng+Tay+Tập" alt="Găng Tay"><h3>Găng Tay Tập</h3><p>Chống trượt, bảo vệ tay.</p></div>
   <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Thảm+Lót+Sàn" alt="Thảm Lót Sàn"><h3>Thảm Lót Sàn</h3><p>Bảo vệ sàn, chống trượt.</p></div>
   <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Rèm+Tạ+Đơn" alt="Rèm Tạ Đơn"><h3>Rèm Tạ Đơn</h3><p>Tăng cường tập luyện cơ tay.</p></div>
   <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Băng+Đeo+Cổ+Tay" alt="Băng Đeo Cổ Tay"><h3>Băng Đeo Cổ Tay</h3><p>Hỗ trợ cổ tay khi tập tạ.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Con+lăn+Tập+Cơ+Bụng" alt="Con Lăn Cơ Bụng"><h3>Con Lăn Tập Cơ Bụng</h3><p>Giúp cơ bụng săn chắc.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Dây+Leo+Thang" alt="Dây Leo Thang"><h3>Dây Leo Thang</h3><p>Rèn luyện sức bền, linh hoạt.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Tạ+Đôi" alt="Tạ Đôi"><h3>Tạ Đôi</h3><p>Thích hợp tập tại nhà.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Con+lăn+Tập+Bụng" alt="Con Lăn Cơ Bụng"><h3>Con Lăn Tập Bụng</h3><p>Giúp cơ bụng săn chắc, luyện core.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Dây+Leo+Thang" alt="Dây Leo Thang"><h3>Dây Leo Thang</h3><p>Rèn luyện sức bền và linh hoạt.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Tạ+Đôi" alt="Tạ Đôi"><h3>Tạ Đôi</h3><p>Thích hợp tập tại nhà hoặc phòng gym.</p></div>
   <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Bộ+Phụ+Kiện" alt="Bộ Phụ Kiện"><h3>Bộ Phụ Kiện Gym</h3><p>Thảm, dây, găng tay đầy đủ.</p></div>
   <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Tập+Vai" alt="Máy Tập Vai"><h3>Máy Tập Vai</h3><p>Phát triển cơ vai hiệu quả.</p></div>
 </div>
-<a href="#contact" class="cta">Liên hệ ngay</a>
+<a href="#contact" class="cta">Đăng ký tập ngay</a>
 </section>
 
 <section id="contact" class="container">
 <h2>Liên hệ</h2>
 <p style="text-align:center;font-size:18px;">Hotline: 0976427208 | Email: info@vangdaulanggym.com</p>
-<p style="text-align:center;font-size:16px;">Địa chỉ: 123 Đường Thể Thao, TP. Hồ Chí Minh</p>
+<p style="text-align:center;font-size:16px;">Địa chỉ: Ô 12, Lô 1, Đền Lừ 1, Phường Tương Mai, Hà Nội</p>
 </section>
 
 <footer>
 © 2026 Vàng Đầu Làng Gym – Nâng tầm sức khỏe
 </footer>
+
 </body>
 </html>
