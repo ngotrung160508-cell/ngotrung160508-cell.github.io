@@ -3,210 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vàng Đầu Làng Mobile Shop</title>
+<title>Vàng Đầu Làng Gym</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:Arial,sans-serif;background:#f4f4f5;}
-header{background:#111;color:#fde68a;padding:20px;text-align:center;font-size:28px;font-weight:bold;}
-nav{display:flex;justify-content:center;gap:20px;background:#1f2937;padding:10px;}
-nav a{text-decoration:none;color:#fde68a;font-weight:bold;padding:6px 12px;border-radius:5px;transition:0.3s;}
-nav a:hover{background:#4ade80;color:#111;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+body{background:#f5f5f5;color:#111;}
+header{background:#0d47a1;color:#fff;padding:20px;text-align:center;font-size:32px;font-weight:bold;}
+nav{display:flex;justify-content:center;gap:20px;background:#1565c0;padding:12px;}
+nav a{text-decoration:none;color:#fff;font-weight:bold;padding:6px 12px;border-radius:5px;transition:0.3s;}
+nav a:hover{background:#ff6f00;color:#fff;}
+.banner{width:100%;height:300px;background:linear-gradient(to right,#1565c0,#42a5f5);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:bold;color:#fff;margin-bottom:30px;border-radius:10px;text-align:center;}
 .container{max-width:1200px;margin:auto;padding:20px;}
-.banner{width:100%;height:200px;background:linear-gradient(135deg,#fde68a,#fef3c7);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:bold;color:#b91c1c;margin-bottom:30px;border-radius:10px;text-align:center;}
-.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+section{margin-bottom:50px;}
+h2{font-size:28px;color:#0d47a1;text-align:center;margin-bottom:20px;}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;}
 .product{background:white;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);padding:15px;text-align:center;transition:0.3s;cursor:pointer;}
-.product:hover{transform:scale(1.05);}
-.product img{width:100%;border-radius:10px;}
-.product h3{margin:10px 0 5px;}
-.price{color:red;font-weight:bold;font-size:18px;}
-.buy{margin-top:10px;padding:10px;background:#10b981;color:white;border:none;border-radius:5px;cursor:pointer;transition:0.3s;}
-.buy:hover{background:#059669;}
-#cart{position:fixed;top:80px;right:20px;background:white;width:320px;max-height:80vh;overflow:auto;border-radius:10px;box-shadow:0 0 15px rgba(0,0,0,0.3);padding:15px;display:none;z-index:100;}
-#cart h3{text-align:center;margin-top:0;}
-.cart-item{display:flex;justify-content:space-between;margin:8px 0;border-bottom:1px solid #ddd;padding-bottom:5px;}
-.cart-item button{background:#ef4444;color:white;border:none;border-radius:4px;cursor:pointer;padding:2px 6px;}
-#modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:200;}
-#modal-content{background:white;width:90%;max-width:800px;padding:20px;border-radius:10px;position:relative;}
-#modal-close{position:absolute;top:10px;right:15px;font-size:22px;cursor:pointer;font-weight:bold;}
-#gallery{display:flex;gap:10px;overflow-x:auto;margin-bottom:15px;}
-#gallery img{width:120px;height:120px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid #ddd;}
-#gallery img.active{border-color:#10b981;}
-#specs{margin-bottom:15px;}
-input{padding:6px;border-radius:5px;border:1px solid #ccc;}
-#voucher{display:flex;gap:5px;margin:10px 0;}
+.product:hover{transform:scale(1.05);box-shadow:0 0 15px rgba(0,0,0,0.3);}
+.product img{width:100%;border-radius:10px;height:150px;object-fit:cover;}
+.product h3{margin:10px 0 5px;font-size:18px;color:#0d47a1;}
+.product p{font-size:14px;color:#555;margin-bottom:5px;}
+.cta{display:block;width:200px;margin:20px auto;padding:12px;background:#ff6f00;color:#fff;text-align:center;font-weight:bold;border-radius:6px;text-decoration:none;transition:0.3s;}
+.cta:hover{background:#e65100;}
+footer{background:#0d47a1;color:#fff;text-align:center;padding:20px;margin-top:30px;}
 </style>
 </head>
 <body>
-<header>Vàng Đầu Làng Mobile Shop</header>
+<header>Vàng Đầu Làng Gym</header>
 <nav>
-<a href="#" onclick="showSection('home')">Trang chủ</a>
-<a href="#" onclick="showSection('products')">Sản phẩm</a>
-<a href="#" onclick="showCart()">Giỏ hàng 🛒 (<span id="cart-count">0</span>)</a>
+<a href="#home">Trang chủ</a>
+<a href="#products">Sản phẩm</a>
+<a href="#contact">Liên hệ</a>
 </nav>
 
-<div class="container">
-  <div id="home">
-    <div class="banner">Khuyến mãi Tết – Điện thoại chính hãng</div>
-    <p style="text-align:center;font-size:18px;">Chào mừng đến với Vàng Đầu Làng Mobile Shop. Chọn điện thoại yêu thích, thêm vào giỏ và nhận voucher giảm giá!</p>
-  </div>
-
-  <div id="products" style="display:none;">
-    <div class="products" id="product-list"></div>
-  </div>
+<div class="banner" id="home">
+  Nâng tầm sức khỏe – Chọn thiết bị tốt nhất cho gym của bạn!
 </div>
 
-<div id="cart">
-  <h3>Giỏ hàng</h3>
-  <div id="cart-items"></div>
-  <div id="voucher">
-    <input type="text" id="voucher-code" placeholder="Nhập voucher (VD: TET500)">
-    <button onclick="applyVoucher()" class="buy">Áp dụng</button>
-  </div>
-  <h4>Tổng: <span id="cart-total">0</span>₫</h4>
-  <button onclick="checkout()" class="buy" style="width:100%;margin-top:10px;">Thanh toán</button>
-</div>
+<section id="intro" class="container">
+  <h2>Giới thiệu thương hiệu</h2>
+  <p style="text-align:center;font-size:18px;">Vàng Đầu Làng Gym cung cấp đầy đủ các thiết bị, dụng cụ tập luyện chất lượng cao, từ máy tập chuyên nghiệp đến tạ, thảm và phụ kiện gym. Đem đến trải nghiệm tập luyện an toàn, hiệu quả và hiện đại.</p>
+</section>
 
-<div id="modal">
-  <div id="modal-content">
-    <span id="modal-close" onclick="closeModal()">×</span>
-    <div id="gallery"></div>
-    <h3 id="modal-name"></h3>
-    <h4 id="modal-price" style="color:red;"></h4>
-    <div id="specs"></div>
-    <button class="buy" id="modal-buy">Thêm vào giỏ</button>
-  </div>
+<section id="products" class="container">
+<h2>Sản phẩm nổi bật</h2>
+<div class="products">
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Chạy+Bộ" alt="Máy Chạy Bộ"><h3>Máy Chạy Bộ</h3><p>Chất lượng cao, động cơ mạnh mẽ.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Tạ+Đòn" alt="Tạ Đòn"><h3>Tạ Đòn</h3><p>Nhiều trọng lượng, phù hợp tập gym.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Ghế+Tạ" alt="Ghế Tạ"><h3>Ghế Tạ Đa Năng</h3><p>Ghế tập đa năng, điều chỉnh dễ dàng.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Dây+Kháng+Lực" alt="Dây Kháng Lực"><h3>Dây Kháng Lực</h3><p>Đa cấp độ, bền bỉ.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Thảm+Tập" alt="Thảm Tập"><h3>Thảm Tập Yoga</h3><p>Mềm mại, chống trượt.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Xe+Đạp+Tập" alt="Xe Đạp Tập"><h3>Xe Đạp Tập</h3><p>Đơn giản, hiệu quả cardio.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Kettlebell" alt="Kettlebell"><h3>Kettlebell</h3><p>Đa trọng lượng, bền chắc.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Bóng+Tập" alt="Bóng Tập"><h3>Bóng Tập Gym</h3><p>Dùng cho yoga và core.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Tập+Ngực" alt="Máy Tập Ngực"><h3>Máy Tập Ngực</h3><p>Thiết kế chuyên nghiệp, dễ sử dụng.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Tập+Cơ+Chân" alt="Máy Tập Chân"><h3>Máy Tập Chân</h3><p>Giúp phát triển cơ bắp mạnh mẽ.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Đai+Tập+Lưng" alt="Đai Tập Lưng"><h3>Đai Tập Lưng</h3><p>Hỗ trợ cột sống, an toàn tập luyện.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Găng+Tay+Tập" alt="Găng Tay"><h3>Găng Tay Tập</h3><p>Chống trượt, bảo vệ tay.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Thảm+Lót+Sàn" alt="Thảm Lót Sàn"><h3>Thảm Lót Sàn</h3><p>Bảo vệ sàn, chống trượt.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Rèm+Tạ+Đơn" alt="Rèm Tạ Đơn"><h3>Rèm Tạ Đơn</h3><p>Tăng cường tập luyện cơ tay.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Băng+Đeo+Cổ+Tay" alt="Băng Đeo Cổ Tay"><h3>Băng Đeo Cổ Tay</h3><p>Hỗ trợ cổ tay khi tập tạ.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Con+lăn+Tập+Cơ+Bụng" alt="Con Lăn Cơ Bụng"><h3>Con Lăn Tập Cơ Bụng</h3><p>Giúp cơ bụng săn chắc.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Dây+Leo+Thang" alt="Dây Leo Thang"><h3>Dây Leo Thang</h3><p>Rèn luyện sức bền, linh hoạt.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Tạ+Đôi" alt="Tạ Đôi"><h3>Tạ Đôi</h3><p>Thích hợp tập tại nhà.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Bộ+Phụ+Kiện" alt="Bộ Phụ Kiện"><h3>Bộ Phụ Kiện Gym</h3><p>Thảm, dây, găng tay đầy đủ.</p></div>
+  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Tập+Vai" alt="Máy Tập Vai"><h3>Máy Tập Vai</h3><p>Phát triển cơ vai hiệu quả.</p></div>
 </div>
+<a href="#contact" class="cta">Liên hệ ngay</a>
+</section>
+
+<section id="contact" class="container">
+<h2>Liên hệ</h2>
+<p style="text-align:center;font-size:18px;">Hotline: 0976427208 | Email: info@vangdaulanggym.com</p>
+<p style="text-align:center;font-size:16px;">Địa chỉ: 123 Đường Thể Thao, TP. Hồ Chí Minh</p>
+</section>
 
 <footer>
-Liên hệ: 0976427208 | © 2026 Vàng Đầu Làng Mobile Shop
+© 2026 Vàng Đầu Làng Gym – Nâng tầm sức khỏe
 </footer>
-
-<script>
-// Dữ liệu sản phẩm
-const products=[
-  {id:1,name:"iPhone 14 Pro Max",price:32990000,imgs:["https://via.placeholder.com/220x220.png?text=iPhone+14+Front","https://via.placeholder.com/220x220.png?text=iPhone+14+Back","https://via.placeholder.com/220x220.png?text=iPhone+14+Side"],specs:{Màn hình:"6.7 inch OLED",Pin:"4323 mAh",RAM:"6 GB",Bộ nhớ:"128/256/512 GB",Camera:"48MP + 12MP + 12MP",CPU:"Apple A16"}},
-  {id:2,name:"Samsung Galaxy S23",price:23990000,imgs:["https://via.placeholder.com/220x220.png?text=S23+Front","https://via.placeholder.com/220x220.png?text=S23+Back","https://via.placeholder.com/220x220.png?text=S23+Side"],specs:{Màn hình:"6.1 inch AMOLED",Pin:"3900 mAh",RAM:"8 GB",Bộ nhớ:"128/256 GB",Camera:"50MP + 10MP + 12MP",CPU:"Snapdragon 8 Gen 2"}},
-  {id:3,name:"Oppo Find X5",price:18990000,imgs:["https://via.placeholder.com/220x220.png?text=Oppo+X5+Front","https://via.placeholder.com/220x220.png?text=Oppo+X5+Back","https://via.placeholder.com/220x220.png?text=Oppo+X5+Side"],specs:{Màn hình:"6.55 inch AMOLED",Pin:"4800 mAh",RAM:"8 GB",Bộ nhớ:"256 GB",Camera:"50MP + 13MP + 13MP",CPU:"Snapdragon 888"}},
-  {id:4,name:"Xiaomi 13",price:16990000,imgs:["https://via.placeholder.com/220x220.png?text=Xiaomi+13+Front","https://via.placeholder.com/220x220.png?text=Xiaomi+13+Back","https://via.placeholder.com/220x220.png?text=Xiaomi+13+Side"],specs:{Màn hình:"6.36 inch AMOLED",Pin:"4500 mAh",RAM:"8 GB",Bộ nhớ:"128/256 GB",Camera:"50MP + 10MP",CPU:"Snapdragon 8 Gen 2"}},
-  {id:5,name:"iPhone 13",price:21990000,imgs:["https://via.placeholder.com/220x220.png?text=iPhone+13+Front","https://via.placeholder.com/220x220.png?text=iPhone+13+Back","https://via.placeholder.com/220x220.png?text=iPhone+13+Side"],specs:{Màn hình:"6.1 inch OLED",Pin:"3240 mAh",RAM:"4 GB",Bộ nhớ:"128/256 GB",Camera:"12MP + 12MP",CPU:"Apple A15"}},
-  {id:6,name:"Samsung Galaxy A54",price:7990000,imgs:["https://via.placeholder.com/220x220.png?text=A54+Front","https://via.placeholder.com/220x220.png?text=A54+Back","https://via.placeholder.com/220x220.png?text=A54+Side"],specs:{Màn hình:"6.4 inch AMOLED",Pin:"5000 mAh",RAM:"6 GB",Bộ nhớ:"128/256 GB",Camera:"50MP + 12MP + 5MP",CPU:"Exynos 1380"}},
-  {id:7,name:"Oppo Reno 8",price:6990000,imgs:["https://via.placeholder.com/220x220.png?text=Reno8+Front","https://via.placeholder.com/220x220.png?text=Reno8+Back","https://via.placeholder.com/220x220.png?text=Reno8+Side"],specs:{Màn hình:"6.43 inch AMOLED",Pin:"4500 mAh",RAM:"8 GB",Bộ nhớ:"128 GB",Camera:"50MP + 2MP",CPU:"Dimensity 1300"}},
-  {id:8,name:"Xiaomi Redmi Note 12",price:4990000,imgs:["https://via.placeholder.com/220x220.png?text=Redmi+12+Front","https://via.placeholder.com/220x220.png?text=Redmi+12+Back","https://via.placeholder.com/220x220.png?text=Redmi+12+Side"],specs:{Màn hình:"6.67 inch AMOLED",Pin:"5000 mAh",RAM:"4 GB",Bộ nhớ:"64/128 GB",Camera:"48MP + 8MP + 2MP",CPU:"Snapdragon 685"}}
-];
-
-let cart=[];
-let discount=0;
-
-// Hiển thị sản phẩm
-function showProducts(){
-  const list=document.getElementById("product-list");
-  list.innerHTML="";
-  products.forEach(p=>{
-    const div=document.createElement("div");
-    div.className="product";
-    div.innerHTML=`<img src="${p.imgs[0]}" alt="${p.name}">
-      <h3>${p.name}</h3>
-      <div class="price">${p.price.toLocaleString()}₫</div>`;
-    div.onclick=()=>openModal(p.id);
-    list.appendChild(div);
-  });
-}
-showProducts();
-
-// Popup chi tiết sản phẩm
-const modal=document.getElementById("modal");
-const gallery=document.getElementById("gallery");
-const specsDiv=document.getElementById("specs");
-const modalName=document.getElementById("modal-name");
-const modalPrice=document.getElementById("modal-price");
-const modalBuy=document.getElementById("modal-buy");
-let currentProduct=null;
-
-function openModal(id){
-  modal.style.display="flex";
-  const p=products.find(x=>x.id===id);
-  currentProduct=p;
-  modalName.innerText=p.name;
-  modalPrice.innerText=p.price.toLocaleString()+"₫";
-  specsDiv.innerHTML="";
-  for(let key in p.specs){
-    specsDiv.innerHTML+=`<p><strong>${key}:</strong> ${p.specs[key]}</p>`;
-  }
-  gallery.innerHTML="";
-  p.imgs.forEach((img,i)=>{
-    const im=document.createElement("img");
-    im.src=img;
-    if(i===0) im.classList.add("active");
-    im.onclick=()=>{document.querySelectorAll("#gallery img").forEach(x=>x.classList.remove("active"));im.classList.add("active");document.querySelector(".product img[src='"+p.imgs[0]+"']").src=img;}
-    gallery.appendChild(im);
-  });
-}
-
-function closeModal(){modal.style.display="none";}
-
-// Giỏ hàng
-function addToCart(id){
-  const product=products.find(p=>p.id===id);
-  const exist=cart.find(p=>p.id===id);
-  if(exist) exist.qty++;
-  else cart.push({...product,qty:1});
-  updateCart();
-  alert(`Bạn đã thêm ${product.name} vào giỏ`);
-}
-
-// Cập nhật giỏ hàng
-function updateCart(){
-  document.getElementById("cart-count").innerText=cart.reduce((a,b)=>a+b.qty,0);
-  const items=document.getElementById("cart-items");
-  items.innerHTML="";
-  cart.forEach(p=>{
-    const div=document.createElement("div");
-    div.className="cart-item";
-    div.innerHTML=`<span>${p.name} x${p.qty}</span><span>${(p.price*p.qty).toLocaleString()}₫ <button onclick="removeFromCart(${p.id})">X</button></span>`;
-    items.appendChild(div);
-  });
-  calculateTotal();
-}
-
-function removeFromCart(id){cart=cart.filter(p=>p.id!==id);updateCart();}
-
-function calculateTotal(){
-  let total=cart.reduce((a,b)=>a+b.price*b.qty,0);
-  total=total-discount;
-  document.getElementById("cart-total").innerText=total.toLocaleString();
-}
-
-// Voucher
-function applyVoucher(){
-  const code=document.getElementById("voucher-code").value;
-  if(code==="TET500" && cart.length>0){
-    discount=500000;
-    alert("Áp dụng voucher giảm 500.000₫");
-  } else alert("Voucher không hợp lệ");
-  calculateTotal();
-}
-
-// Checkout
-function checkout(){
-  if(cart.length===0){alert("Giỏ hàng trống!");return;}
-  let items=cart.map(p=>`${p.name} x${p.qty} = ${(p.price*p.qty).toLocaleString()}₫`).join("\n");
-  let total=cart.reduce((a,b)=>a+b.price*b.qty,0)-discount;
-  alert(`Hóa đơn của bạn:\n${items}\nVoucher: ${discount.toLocaleString()}₫\nTổng: ${total.toLocaleString()}₫`);
-  cart=[]; discount=0;
-  updateCart();
-}
-
-// Nút mua trong modal
-modalBuy.onclick=()=>{addToCart(currentProduct.id);closeModal();}
-
-// Chuyển mục
-function showSection(sec){
-  document.getElementById("home").style.display = sec==="home"?"block":"none";
-  document.getElementById("products").style.display = sec==="products"?"block":"none";
-  if(sec==="cart") showCart();
-}
-
-function showCart(){document.getElementById("cart").style.display="block";}
-</script>
 </body>
 </html>
