@@ -3,131 +3,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gym Community</title>
+<title>Gym Social Feed</title>
 <style>
-body{font-family:Arial,sans-serif;background:#f5f5f5;color:#111;margin:0;padding:0;}
-header{background:#1e1e1e;color:#fff;padding:15px;text-align:center;font-size:24px;}
-.container{max-width:900px;margin:20px auto;padding:10px;}
-.post-form{background:#fff;padding:20px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);margin-bottom:20px;}
-.post-form input, .post-form textarea{width:100%;padding:10px;margin-bottom:10px;border-radius:5px;border:1px solid #ccc;}
-.post-form button{padding:10px 15px;background:#ff6b6b;color:#fff;border:none;border-radius:5px;cursor:pointer;transition:0.3s;}
-.post-form button:hover{background:#e05555;}
-.posts{list-style:none;padding:0;}
-.post{background:#fff;padding:15px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,0.1);margin-bottom:15px;position:relative;opacity:0;transform:translateY(20px);transition:0.5s;}
+body{font-family:Arial,sans-serif;background:#f0f2f5;margin:0;}
+header{background:#1877f2;color:#fff;padding:15px;text-align:center;font-size:24px;}
+.container{max-width:600px;margin:20px auto;padding:0 10px;}
+.post-form{background:#fff;padding:15px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.2);margin-bottom:15px;}
+.post-form textarea{width:100%;padding:10px;border-radius:5px;border:1px solid #ccc;resize:none;}
+.post-form button{margin-top:10px;padding:8px 15px;background:#1877f2;color:#fff;border:none;border-radius:5px;cursor:pointer;transition:0.3s;}
+.post-form button:hover{background:#155bb5;}
+.feed{list-style:none;padding:0;}
+.post{background:#fff;margin-bottom:15px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.1);padding:10px;opacity:0;transform:translateY(20px);transition:0.5s;}
 .post.visible{opacity:1;transform:translateY(0);}
-.post h4{margin-bottom:5px;color:#ff6b6b;}
-.post p{margin-bottom:5px;}
-.post small{color:#555;}
-.delete-btn{position:absolute;top:10px;right:10px;background:#e05555;color:#fff;border:none;padding:5px 8px;border-radius:5px;cursor:pointer;display:none;}
-.post.admin .delete-btn{display:block;}
-.comment-section{margin-top:10px;padding-left:15px;border-left:2px solid #ff6b6b;}
-.comment{background:#f1f1f1;padding:8px;border-radius:5px;margin-bottom:5px;position:relative;}
-.comment h5{margin:0 0 3px 0;color:#1e1e1e;font-size:14px;}
-.comment p{margin:0;font-size:13px;}
+.post-header{display:flex;justify-content:space-between;align-items:center;}
+.post-header h4{margin:0;color:#1877f2;}
+.post-header button{background:#e05555;color:#fff;border:none;padding:3px 7px;border-radius:4px;cursor:pointer;display:none;}
+.post.admin .post-header button{display:block;}
+.post-content{margin:10px 0;}
+.post-actions{display:flex;gap:15px;font-size:14px;color:#555;}
+.post-actions button{background:none;border:none;cursor:pointer;}
+.comments{margin-top:10px;padding-left:10px;}
+.comment{background:#f0f2f5;padding:5px 8px;border-radius:5px;margin-bottom:5px;position:relative;}
+.comment h5{margin:0;font-size:13px;color:#1877f2;}
+.comment p{margin:2px 0;font-size:13px;}
 .comment .delete-btn{position:absolute;top:5px;right:5px;background:#e05555;color:#fff;border:none;padding:2px 5px;border-radius:5px;cursor:pointer;display:none;}
 .comment.admin .delete-btn{display:block;}
+.comment-input{display:flex;gap:5px;margin-top:5px;}
+.comment-input input{flex:1;padding:5px;border-radius:5px;border:1px solid #ccc;}
+.comment-input button{padding:5px 10px;background:#1877f2;color:#fff;border:none;border-radius:5px;cursor:pointer;}
+.comment-input button:hover{background:#155bb5;}
+.like-count{margin-left:5px;}
 </style>
 </head>
 <body>
 
-<header>Gym Community</header>
+<header>Gym Social Feed</header>
 
 <div class="container">
 
 <!-- Form đăng bài -->
 <div class="post-form">
-<input type="text" id="username" placeholder="Tên của bạn (hoặc Admin)" required>
-<textarea id="postContent" placeholder="Viết bài tập, thảo luận, mẹo gym..." rows="3" required></textarea>
+<textarea id="postContent" rows="3" placeholder="Viết bài tập, mẹo gym hoặc chia sẻ kinh nghiệm..."></textarea>
+<input type="text" id="username" placeholder="Tên của bạn (hoặc Admin)">
 <button id="postBtn">Đăng bài</button>
 </div>
 
-<!-- Danh sách bài viết -->
-<ul class="posts" id="postsList"></ul>
+<!-- Feed -->
+<ul class="feed" id="feedList"></ul>
 
 </div>
 
 <script>
-// ===== localStorage demo =====
-let posts = JSON.parse(localStorage.getItem('gymPosts')) || [];
+// ===== Data lưu localStorage =====
+let feed = JSON.parse(localStorage.getItem('gymFeed')) || [];
 
-// ===== render posts =====
-function renderPosts(){
-  const postsList = document.getElementById('postsList');
-  postsList.innerHTML = '';
-  posts.forEach((post,index)=>{
+// ===== Render feed =====
+function renderFeed(){
+  const feedList = document.getElementById('feedList');
+  feedList.innerHTML = '';
+  feed.forEach((post, index)=>{
     const postEl = document.createElement('li');
     postEl.classList.add('post');
-    postEl.classList.add(post.username.toLowerCase() === 'admin' ? 'admin' : '');
+    if(post.username.toLowerCase()==='admin') postEl.classList.add('admin');
     setTimeout(()=>postEl.classList.add('visible'),50);
     postEl.innerHTML = `
-      <h4>${post.username}</h4>
-      <p>${post.content}</p>
-      <small>${new Date(post.time).toLocaleString()}</small>
-      ${post.username.toLowerCase() === 'admin' ? `<button class="delete-btn" onclick="deletePost(${index})">Xóa</button>` : ''}
-      <div class="comment-section">
-        <input type="text" placeholder="Bình luận..." onkeypress="handleComment(event, ${index})">
-        <div class="comments">
-          ${post.comments.map((c,i)=>`
-            <div class="comment ${c.username.toLowerCase() === 'admin' ? 'admin' : ''}">
-              <h5>${c.username}</h5>
-              <p>${c.content}</p>
-              ${c.username.toLowerCase()==='admin'? `<button class="delete-btn" onclick="deleteComment(${index},${i})">Xóa</button>`: ''}
-            </div>
-          `).join('')}
+      <div class="post-header">
+        <h4>${post.username}</h4>
+        ${post.username.toLowerCase()==='admin'? `<button onclick="deletePost(${index})">Xóa</button>`: ''}
+      </div>
+      <div class="post-content">${post.content}</div>
+      <div class="post-actions">
+        <button onclick="toggleLike(${index})">${post.likes.includes('user')?'❤️':'🤍'} Thích</button><span class="like-count">${post.likes.length}</span>
+      </div>
+      <div class="comments">
+        ${post.comments.map((c,i)=>`
+          <div class="comment ${c.username.toLowerCase()==='admin'?'admin':''}">
+            <h5>${c.username}</h5>
+            <p>${c.content}</p>
+            ${c.username.toLowerCase()==='admin'? `<button class="delete-btn" onclick="deleteComment(${index},${i})">Xóa</button>`: ''}
+          </div>
+        `).join('')}
+        <div class="comment-input">
+          <input type="text" placeholder="Bình luận..." onkeypress="addComment(event,${index})">
+          <button onclick="addCommentBtn(${index})">Gửi</button>
         </div>
       </div>
     `;
-    postsList.appendChild(postEl);
+    feedList.appendChild(postEl);
   });
 }
 
-// ===== thêm bài viết =====
-document.getElementById('postBtn').addEventListener('click',()=>{
-  const username = document.getElementById('username').value.trim();
+// ===== Thêm bài viết =====
+document.getElementById('postBtn').addEventListener('click', ()=>{
   const content = document.getElementById('postContent').value.trim();
-  if(username && content){
-    posts.unshift({username,content,time:Date.now(),comments:[]});
-    localStorage.setItem('gymPosts',JSON.stringify(posts));
-    document.getElementById('postContent').value='';
-    renderPosts();
-  }
+  const username = document.getElementById('username').value.trim() || 'Người dùng';
+  if(!content) return alert('Vui lòng nhập nội dung!');
+  feed.unshift({username, content, likes:[], comments:[], time:Date.now()});
+  localStorage.setItem('gymFeed', JSON.stringify(feed));
+  document.getElementById('postContent').value='';
+  renderFeed();
 });
 
-// ===== xóa bài (admin) =====
+// ===== Delete post (admin) =====
 function deletePost(index){
-  if(confirm('Bạn có chắc muốn xóa bài này?')){
-    posts.splice(index,1);
-    localStorage.setItem('gymPosts',JSON.stringify(posts));
-    renderPosts();
+  if(confirm('Xác nhận xóa bài?')){
+    feed.splice(index,1);
+    localStorage.setItem('gymFeed', JSON.stringify(feed));
+    renderFeed();
   }
 }
 
-// ===== thêm bình luận =====
-function handleComment(e,postIndex){
+// ===== Like/Dislike =====
+function toggleLike(index){
+  let post = feed[index];
+  if(post.likes.includes('user')) post.likes = post.likes.filter(u=>'user'!==u);
+  else post.likes.push('user');
+  localStorage.setItem('gymFeed', JSON.stringify(feed));
+  renderFeed();
+}
+
+// ===== Thêm bình luận =====
+function addComment(e, postIndex){
   if(e.key==='Enter'){
     const input = e.target;
     const commentText = input.value.trim();
-    const username = prompt('Nhập tên của bạn:','Người dùng');
+    const username = prompt('Tên của bạn:','Người dùng');
     if(commentText && username){
-      posts[postIndex].comments.push({username,content:commentText});
-      localStorage.setItem('gymPosts',JSON.stringify(posts));
+      feed[postIndex].comments.push({username, content: commentText});
+      localStorage.setItem('gymFeed', JSON.stringify(feed));
       input.value='';
-      renderPosts();
+      renderFeed();
     }
   }
 }
-
-// ===== xóa bình luận (admin) =====
-function deleteComment(postIndex,commentIndex){
-  if(confirm('Bạn có chắc muốn xóa bình luận này?')){
-    posts[postIndex].comments.splice(commentIndex,1);
-    localStorage.setItem('gymPosts',JSON.stringify(posts));
-    renderPosts();
+function addCommentBtn(postIndex){
+  const input = document.querySelectorAll('.post')[postIndex].querySelector('.comment-input input');
+  const commentText = input.value.trim();
+  const username = prompt('Tên của bạn:','Người dùng');
+  if(commentText && username){
+    feed[postIndex].comments.push({username, content: commentText});
+    localStorage.setItem('gymFeed', JSON.stringify(feed));
+    input.value='';
+    renderFeed();
   }
 }
 
-// ===== lần đầu render =====
-renderPosts();
+// ===== Delete comment (admin) =====
+function deleteComment(postIndex, commentIndex){
+  if(confirm('Xác nhận xóa bình luận?')){
+    feed[postIndex].comments.splice(commentIndex,1);
+    localStorage.setItem('gymFeed', JSON.stringify(feed));
+    renderFeed();
+  }
+}
+
+// ===== Lần đầu render =====
+renderFeed();
 </script>
 
 </body>
