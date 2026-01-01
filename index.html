@@ -3,78 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vàng Đầu Làng Gym</title>
+<title>Vàng Đầu Làng Gym - Dịch vụ chuyên nghiệp</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-body{background:#f4f4f5;color:#111;}
-header{background:#0d47a1;color:#fff;padding:20px;text-align:center;font-size:32px;font-weight:bold;}
-nav{display:flex;justify-content:center;gap:20px;background:#1565c0;padding:12px;}
-nav a{text-decoration:none;color:#fff;font-weight:bold;padding:6px 12px;border-radius:5px;transition:0.3s;}
+body{background:#f5f5f5;color:#111;}
+header{background:#0d47a1;color:#fff;padding:25px;text-align:center;font-size:36px;font-weight:bold;}
+nav{display:flex;justify-content:center;gap:20px;background:#1565c0;padding:14px;flex-wrap:wrap;}
+nav a{text-decoration:none;color:#fff;font-weight:bold;padding:8px 16px;border-radius:6px;transition:0.3s;}
 nav a:hover{background:#ff6f00;color:#fff;}
-.banner{width:100%;height:350px;background:linear-gradient(to right,#1565c0,#42a5f5);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:36px;font-weight:bold;color:#fff;margin-bottom:30px;border-radius:10px;text-align:center;position:relative;}
-.banner img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.3;border-radius:10px;}
+.banner{width:100%;height:350px;background:linear-gradient(135deg,#1565c0,#42a5f5);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:36px;font-weight:bold;color:#fff;margin-bottom:40px;border-radius:12px;text-align:center;position:relative;}
+.banner div.subtitle{font-size:22px;margin-top:12px;}
 .container{max-width:1200px;margin:auto;padding:20px;}
-h2{font-size:28px;color:#0d47a1;text-align:center;margin-bottom:20px;}
+h2{font-size:32px;color:#0d47a1;text-align:center;margin-bottom:25px;}
 p{font-size:16px;color:#333;text-align:center;margin-bottom:15px;}
-.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;}
-.product{background:white;border-radius:10px;box-shadow:0 0 10px rgba(0,0,0,0.1);padding:15px;text-align:center;transition:0.3s;cursor:pointer;}
-.product:hover{transform:scale(1.05);box-shadow:0 0 15px rgba(0,0,0,0.3);}
-.product img{width:100%;border-radius:10px;height:150px;object-fit:cover;}
-.product h3{margin:10px 0 5px;font-size:18px;color:#0d47a1;}
-.product p{font-size:14px;color:#555;}
-.cta{display:block;width:220px;margin:20px auto;padding:12px;background:#ff6f00;color:#fff;text-align:center;font-weight:bold;border-radius:6px;text-decoration:none;transition:0.3s;}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:25px;margin-top:30px;}
+.service{background:white;border-radius:12px;box-shadow:0 0 15px rgba(0,0,0,0.1);padding:20px;text-align:center;transition:0.3s;cursor:pointer;}
+.service:hover{transform:translateY(-5px);box-shadow:0 0 20px rgba(0,0,0,0.25);}
+.service-icon{font-size:50px;color:#ff6f00;margin-bottom:15px;}
+.service h3{font-size:20px;color:#0d47a1;margin-bottom:10px;}
+.service p{font-size:15px;color:#555;}
+.cta{display:block;width:240px;margin:30px auto;padding:14px;background:#ff6f00;color:#fff;text-align:center;font-weight:bold;border-radius:8px;text-decoration:none;transition:0.3s;font-size:18px;}
 .cta:hover{background:#e65100;}
-footer{background:#0d47a1;color:#fff;text-align:center;padding:20px;margin-top:30px;}
-section{margin-bottom:50px;}
+footer{background:#0d47a1;color:#fff;text-align:center;padding:25px;margin-top:30px;}
+@media(max-width:768px){.banner{height:250px;font-size:28px;}.banner div.subtitle{font-size:18px;}}
 </style>
+<!-- Font Awesome cho icon dịch vụ -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <header>Vàng Đầu Làng Gym</header>
 <nav>
 <a href="#home">Trang chủ</a>
-<a href="#intro">Giới thiệu</a>
-<a href="#products">Dụng cụ</a>
+<a href="#services">Dịch vụ</a>
 <a href="#contact">Liên hệ</a>
 </nav>
 
 <div class="banner" id="home">
-<img src="https://via.placeholder.com/1200x350.png?text=Vàng+Đầu+Làng+Gym+Banner" alt="Banner Gym">
-<div>Vàng Đầu Làng Gym</div>
-<div style="font-size:20px;margin-top:10px;">Nâng tầm sức khỏe – Phòng gym hiện đại tại Hà Nội</div>
+  <div>Vàng Đầu Làng Gym</div>
+  <div class="subtitle">Nâng tầm sức khỏe – Trải nghiệm dịch vụ chuyên nghiệp</div>
 </div>
 
-<section id="intro" class="container">
-<h2>Giới thiệu phòng gym</h2>
-<p>Vàng Đầu Làng Gym – địa chỉ tin cậy cho người yêu thể thao tại Ô 12, Lô 1, Đền Lừ 1, Phường Tương Mai, Hà Nội. Chúng tôi cung cấp các thiết bị tập luyện hiện đại, phòng ốc rộng rãi và huấn luyện viên chuyên nghiệp.</p>
-<p>Tham gia ngay để nâng cao sức khỏe, tăng cơ bắp và trải nghiệm môi trường tập luyện năng động.</p>
-</section>
+<section id="services" class="container">
+<h2>Dịch vụ của chúng tôi</h2>
+<p>Phòng gym hiện đại, xông hơi, bể bơi và huấn luyện cá nhân – tất cả trong một không gian chuyên nghiệp.</p>
 
-<section id="products" class="container">
-<h2>Dụng cụ và thiết bị gym</h2>
-<div class="products">
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Chạy+Bộ" alt="Máy Chạy Bộ"><h3>Máy Chạy Bộ</h3><p>Động cơ mạnh mẽ, bền bỉ, hỗ trợ cardio.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Tạ+Đòn" alt="Tạ Đòn"><h3>Tạ Đòn</h3><p>Nhiều trọng lượng, chất liệu thép cao cấp.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Ghế+Tạ" alt="Ghế Tạ"><h3>Ghế Tạ Đa Năng</h3><p>Điều chỉnh linh hoạt, phù hợp mọi bài tập.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Dây+Kháng+Lực" alt="Dây Kháng Lực"><h3>Dây Kháng Lực</h3><p>Đa cấp độ, bền bỉ, rèn sức mạnh.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Thảm+Tập" alt="Thảm Tập"><h3>Thảm Yoga</h3><p>Mềm mại, chống trượt, thoải mái luyện tập.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Xe+Đạp+Tập" alt="Xe Đạp Tập"><h3>Xe Đạp Tập</h3><p>Đơn giản, hỗ trợ cardio hiệu quả.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Kettlebell" alt="Kettlebell"><h3>Kettlebell</h3><p>Đa trọng lượng, tập tay và core.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Bóng+Tập" alt="Bóng Tập"><h3>Bóng Tập Gym</h3><p>Dùng cho yoga, core, tăng độ linh hoạt.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Tập+Ngực" alt="Máy Tập Ngực"><h3>Máy Tập Ngực</h3><p>Phát triển cơ ngực, dễ sử dụng.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Tập+Chân" alt="Máy Tập Chân"><h3>Máy Tập Chân</h3><p>Phát triển cơ chân, độ bền cao.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Đai+Tập+Lưng" alt="Đai Lưng"><h3>Đai Tập Lưng</h3><p>Hỗ trợ cột sống, an toàn luyện tập.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Găng+Tay+Tập" alt="Găng Tay"><h3>Găng Tay Tập</h3><p>Chống trượt, bảo vệ tay.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Thảm+Lót+Sàn" alt="Thảm Lót Sàn"><h3>Thảm Lót Sàn</h3><p>Bảo vệ sàn, chống trượt.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Rèm+Tạ+Đơn" alt="Rèm Tạ Đơn"><h3>Rèm Tạ Đơn</h3><p>Tăng cường tập luyện cơ tay.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Băng+Đeo+Cổ+Tay" alt="Băng Đeo Cổ Tay"><h3>Băng Đeo Cổ Tay</h3><p>Hỗ trợ cổ tay khi tập tạ.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Con+lăn+Tập+Bụng" alt="Con Lăn Cơ Bụng"><h3>Con Lăn Tập Bụng</h3><p>Giúp cơ bụng săn chắc, luyện core.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Dây+Leo+Thang" alt="Dây Leo Thang"><h3>Dây Leo Thang</h3><p>Rèn luyện sức bền và linh hoạt.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Tạ+Đôi" alt="Tạ Đôi"><h3>Tạ Đôi</h3><p>Thích hợp tập tại nhà hoặc phòng gym.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Bộ+Phụ+Kiện" alt="Bộ Phụ Kiện"><h3>Bộ Phụ Kiện Gym</h3><p>Thảm, dây, găng tay đầy đủ.</p></div>
-  <div class="product"><img src="https://via.placeholder.com/200x150.png?text=Máy+Tập+Vai" alt="Máy Tập Vai"><h3>Máy Tập Vai</h3><p>Phát triển cơ vai hiệu quả.</p></div>
+<div class="services">
+  <div class="service">
+    <div class="service-icon"><i class="fas fa-dumbbell"></i></div>
+    <h3>Phòng Gym</h3>
+    <p>Máy tập hiện đại, đa dạng bài tập cho mọi cấp độ.</p>
+  </div>
+  <div class="service">
+    <div class="service-icon"><i class="fas fa-spa"></i></div>
+    <h3>Xông hơi</h3>
+    <p>Hệ thống xông hơi sauna & steam thư giãn, giải tỏa căng thẳng.</p>
+  </div>
+  <div class="service">
+    <div class="service-icon"><i class="fas fa-swimmer"></i></div>
+    <h3>Bể bơi</h3>
+    <p>Bể bơi sạch, hiện đại, phục vụ bơi lội và aqua fitness.</p>
+  </div>
+  <div class="service">
+    <div class="service-icon"><i class="fas fa-running"></i></div>
+    <h3>Cardio</h3>
+    <p>Máy chạy bộ, xe đạp tập, thiết bị cardio tối ưu hiệu quả luyện tập.</p>
+  </div>
+  <div class="service">
+    <div class="service-icon"><i class="fas fa-user-tie"></i></div>
+    <h3>Huấn luyện cá nhân</h3>
+    <p>PT chuyên nghiệp, lập kế hoạch tập luyện theo mục tiêu.</p>
+  </div>
+  <div class="service">
+    <div class="service-icon"><i class="fas fa-yoga"></i></div>
+    <h3>Yoga & Thể dục nhóm</h3>
+    <p>Lớp yoga, zumba, thể dục nhóm giúp nâng cao sức khỏe và tinh thần.</p>
+  </div>
+  <div class="service">
+    <div class="service-icon"><i class="fas fa-heartbeat"></i></div>
+    <h3>Kiểm tra sức khỏe</h3>
+    <p>Đo chỉ số cơ thể, tư vấn dinh dưỡng, theo dõi tiến độ luyện tập.</p>
+  </div>
+  <div class="service">
+    <div class="service-icon"><i class="fas fa-water"></i></div>
+    <h3>Dịch vụ spa & thư giãn</h3>
+    <p>Mát-xa, thư giãn, xả stress sau giờ tập.</p>
+  </div>
 </div>
-<a href="#contact" class="cta">Đăng ký tập ngay</a>
+<a href="#contact" class="cta">Đăng ký trải nghiệm ngay</a>
 </section>
 
 <section id="contact" class="container">
