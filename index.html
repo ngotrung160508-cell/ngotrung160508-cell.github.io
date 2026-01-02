@@ -2,31 +2,70 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Shape Fun</title>
+<title>Xếp Hình Cùng CuMin</title>
 
 <style>
 body{
-  background: url("575243192_828061666267288_4525476926859105855_n.jpg") center / cover no-repeat;
-  text-align:center;
+  margin:0;
+  min-height:100vh;
+  background:url("575243192_828061666267288_4525476926859105855_n.jpg") center/cover no-repeat;
   font-family:Arial;
+  text-align:center;
 }
 
-.game{display:flex;justify-content:center;gap:40px;margin:40px}
+/* TIÊU ĐỀ */
+h2{
+  color:#fff;
+  text-shadow:2px 2px 8px #000;
+  font-size:30px;
+  margin-top:20px;
+}
 
-.slot{width:100px;height:100px;display:flex;align-items:center;justify-content:center}
+/* KHUNG GAME */
+.board{
+  display:inline-block;
+  margin-top:20px;
+  background:rgba(255,255,255,0.9);
+  padding:30px 40px;
+  border-radius:26px;
+  box-shadow:0 15px 35px rgba(0,0,0,0.35);
+}
 
+.game{
+  display:flex;
+  justify-content:center;
+  gap:40px;
+}
+
+/* SLOT */
+.slot{
+  width:110px;
+  height:110px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  border-radius:18px;
+}
+
+/* HÌNH KÉO */
 .shape{
-  width:100px;height:100px;
+  width:100px;
+  height:100px;
   position:absolute;
   cursor:pointer;
   touch-action:none;
   transition:0.15s;
 }
 
-.circle{background:red;border-radius:50%}
-.square{background:green}
-.triangle{background:blue;clip-path:polygon(50% 0%,0% 100%,100% 100%)}
+.circle{background:#ff5252;border-radius:50%}
+.square{background:#4caf50}
+.triangle{
+  background:#2196f3;
+  clip-path:polygon(50% 0%,0% 100%,100% 100%);
+}
 
+/* RUNG KHI SAI */
 @keyframes shake{
   0%,100%{transform:translateX(0)}
   25%{transform:translateX(-6px)}
@@ -36,65 +75,67 @@ body{
 </head>
 
 <body>
+
 <h2>Xếp Hình Cùng CuMin</h2>
 
-<div class="game">
-  <div class="slot" data-shape="circle">
-    <svg width="100" height="100">
-      <circle cx="50" cy="50" r="44" fill="none" stroke="#999" stroke-width="4"/>
-    </svg>
-  </div>
+<div class="board">
+  <div class="game">
+    <div class="slot" data-shape="circle">
+      <svg width="100" height="100">
+        <circle cx="50" cy="50" r="44" fill="none" stroke="#999" stroke-width="4"/>
+      </svg>
+    </div>
 
-  <div class="slot" data-shape="square">
-    <svg width="100" height="100">
-      <rect x="6" y="6" width="88" height="88" fill="none" stroke="#999" stroke-width="4"/>
-    </svg>
-  </div>
+    <div class="slot" data-shape="square">
+      <svg width="100" height="100">
+        <rect x="6" y="6" width="88" height="88" fill="none" stroke="#999" stroke-width="4"/>
+      </svg>
+    </div>
 
-  <div class="slot" data-shape="triangle">
-    <svg width="100" height="100">
-      <polygon points="50,6 6,94 94,94"
-        fill="none" stroke="#999" stroke-width="4" stroke-linejoin="round"/>
-    </svg>
+    <div class="slot" data-shape="triangle">
+      <svg width="100" height="100">
+        <polygon points="50,6 6,94 94,94"
+          fill="none" stroke="#999" stroke-width="4" stroke-linejoin="round"/>
+      </svg>
+    </div>
   </div>
 </div>
 
-<div class="shape circle" data-shape="circle" style="top:320px;left:150px"></div>
-<div class="shape square" data-shape="square" style="top:320px;left:300px"></div>
-<div class="shape triangle" data-shape="triangle" style="top:320px;left:450px"></div>
+<!-- HÌNH KÉO -->
+<div class="shape circle" data-shape="circle" style="top:380px;left:120px"></div>
+<div class="shape square" data-shape="square" style="top:380px;left:280px"></div>
+<div class="shape triangle" data-shape="triangle" style="top:380px;left:440px"></div>
 
-<!-- 🔊 ÂM THANH -->
+<!-- ÂM THANH -->
 <audio id="soundWin" src="hello.mp3" preload="auto"></audio>
 
 <script>
 let active=null,ox=0,oy=0,startX=0,startY=0;
-const SNAP_DISTANCE = 60;
+const SNAP_DISTANCE=60;
 
-/* ===== MỞ KHÓA ÂM THANH CHO MOBILE ===== */
-let soundUnlocked = false;
-
+/* MỞ KHÓA ÂM THANH MOBILE */
+let soundUnlocked=false;
 function unlockSound(){
   if(soundUnlocked) return;
-  const s = document.getElementById("soundWin");
-  s.muted = true;
+  const s=document.getElementById("soundWin");
+  s.muted=true;
   s.play().then(()=>{
-    s.pause();
-    s.currentTime = 0;
-    s.muted = false;
-    soundUnlocked = true;
+    s.pause(); s.currentTime=0; s.muted=false;
+    soundUnlocked=true;
   }).catch(()=>{});
 }
-document.addEventListener("pointerdown", unlockSound, { once:true });
+document.addEventListener("pointerdown",unlockSound,{once:true});
 
-/* ===== PHÁT ÂM THANH KHI ĐÚNG ===== */
+/* PHÁT ÂM THANH */
 function playWinSound(){
-  const s = document.getElementById("soundWin");
-  s.currentTime = 0;
+  const s=document.getElementById("soundWin");
+  s.currentTime=0;
   s.play().catch(()=>{});
 }
 
-document.querySelectorAll('.shape').forEach(s=>{
-  s.addEventListener('pointerdown',e=>{
+/* KÉO THẢ */
+document.querySelectorAll(".shape").forEach(s=>{
+  s.addEventListener("pointerdown",e=>{
     active=s;
     ox=e.clientX-s.offsetLeft;
     oy=e.clientY-s.offsetTop;
@@ -104,32 +145,28 @@ document.querySelectorAll('.shape').forEach(s=>{
   });
 });
 
-document.addEventListener('pointermove',e=>{
+document.addEventListener("pointermove",e=>{
   if(!active) return;
   active.style.left=e.clientX-ox+"px";
   active.style.top=e.clientY-oy+"px";
 });
 
-document.addEventListener('pointerup',()=>{
+document.addEventListener("pointerup",()=>{
   if(!active) return;
   let ok=false;
 
-  document.querySelectorAll('.slot').forEach(slot=>{
-    const shapeRect=active.getBoundingClientRect();
-    const slotRect=slot.getBoundingClientRect();
+  document.querySelectorAll(".slot").forEach(slot=>{
+    const a=active.getBoundingClientRect();
+    const b=slot.getBoundingClientRect();
+    const d=Math.hypot((a.left+50)-(b.left+50),(a.top+50)-(b.top+50));
+    const outline=slot.querySelector("*");
 
-    const dx=(shapeRect.left+50)-(slotRect.left+50);
-    const dy=(shapeRect.top+50)-(slotRect.top+50);
-    const distance=Math.sqrt(dx*dx+dy*dy);
-
-    const outline=slot.querySelector("circle,rect,polygon");
-
-    if(distance < SNAP_DISTANCE){
+    if(d<SNAP_DISTANCE){
       if(slot.dataset.shape===active.dataset.shape){
-        active.style.left=slotRect.left+"px";
-        active.style.top=slotRect.top+"px";
+        active.style.left=b.left+"px";
+        active.style.top=b.top+"px";
         outline.setAttribute("stroke","#4caf50");
-        playWinSound(); // 🔊 CÓ TIẾNG TRÊN ĐIỆN THOẠI
+        playWinSound();
         ok=true;
       }else{
         outline.setAttribute("stroke","#f44336");
@@ -143,7 +180,6 @@ document.addEventListener('pointerup',()=>{
     active.style.top=startY;
     setTimeout(()=>active.style.animation="",300);
   }
-
   active=null;
 });
 </script>
