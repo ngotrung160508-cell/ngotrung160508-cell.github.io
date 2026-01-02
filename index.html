@@ -11,45 +11,21 @@ body{
   font-family:Arial;
 }
 
-h2{background:#fff;padding:10px 20px;border-radius:12px;display:inline-block}
+.game{display:flex;justify-content:center;gap:40px;margin:40px}
 
-.game{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:30px;
-  margin:30px auto;
-  background:#ffffffcc;
-  padding:20px;
-  border-radius:20px;
-  width:720px;
-}
-
-.slot{
-  width:90px;height:90px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+.slot{width:100px;height:100px;display:flex;align-items:center;justify-content:center}
 
 .shape{
-  width:90px;height:90px;
+  width:100px;height:100px;
   position:absolute;
   cursor:pointer;
   touch-action:none;
+  transition:0.15s;
 }
 
-/* ===== SHAPE MÀU ===== */
 .circle{background:red;border-radius:50%}
 .square{background:green}
 .triangle{background:blue;clip-path:polygon(50% 0%,0% 100%,100% 100%)}
-.rectangle{background:orange;width:120px}
-.diamond{background:purple;transform:rotate(45deg)}
-.star{background:gold;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
-.heart{background:pink;clip-path:polygon(50% 80%,0 40%,25% 0,50% 20%,75% 0,100% 40%)}
-.half{background:#00bcd4;border-radius:100px 100px 0 0}
-.trapezoid{background:#795548;clip-path:polygon(20% 0,80% 0,100% 100%,0 100%)}
-.hexagon{background:#9c27b0;clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)}
 
 @keyframes shake{
   0%,100%{transform:translateX(0)}
@@ -60,48 +36,65 @@ h2{background:#fff;padding:10px 20px;border-radius:12px;display:inline-block}
 </head>
 
 <body>
-
 <h2>Đặt hình vào đúng chỗ</h2>
 
 <div class="game">
-  <div class="slot" data-shape="circle"><svg width="90" height="90"><circle cx="45" cy="45" r="38" fill="none" stroke="#999" stroke-width="4"/></svg></div>
-  <div class="slot" data-shape="square"><svg width="90" height="90"><rect x="8" y="8" width="74" height="74" fill="none" stroke="#999" stroke-width="4"/></svg></div>
-  <div class="slot" data-shape="triangle"><svg width="90" height="90"><polygon points="45,8 8,82 82,82" fill="none" stroke="#999" stroke-width="4"/></svg></div>
-  <div class="slot" data-shape="rectangle"><svg width="120" height="90"><rect x="6" y="20" width="108" height="50" fill="none" stroke="#999" stroke-width="4"/></svg></div>
-  <div class="slot" data-shape="diamond"><svg width="90" height="90"><polygon points="45,5 85,45 45,85 5,45" fill="none" stroke="#999" stroke-width="4"/></svg></div>
-  <div class="slot" data-shape="star"><svg width="90" height="90"><polygon points="45,5 55,35 85,35 60,55 70,85 45,65 20,85 30,55 5,35 35,35" fill="none" stroke="#999" stroke-width="4"/></svg></div>
-  <div class="slot" data-shape="heart"><svg width="90" height="90"><path d="M45 75 L10 40 A20 20 0 0 1 45 25 A20 20 0 0 1 80 40 Z" fill="none" stroke="#999" stroke-width="4"/></svg></div>
-  <div class="slot" data-shape="half"><svg width="90" height="90"><path d="M10 80 A35 35 0 0 1 80 80 Z" fill="none" stroke="#999" stroke-width="4"/></svg></div>
-  <div class="slot" data-shape="trapezoid"><svg width="90" height="90"><polygon points="20,20 70,20 85,80 5,80" fill="none" stroke="#999" stroke-width="4"/></svg></div>
-  <div class="slot" data-shape="hexagon"><svg width="90" height="90"><polygon points="25,5 65,5 85,45 65,85 25,85 5,45" fill="none" stroke="#999" stroke-width="4"/></svg></div>
+  <div class="slot" data-shape="circle">
+    <svg width="100" height="100">
+      <circle cx="50" cy="50" r="44" fill="none" stroke="#999" stroke-width="4"/>
+    </svg>
+  </div>
+
+  <div class="slot" data-shape="square">
+    <svg width="100" height="100">
+      <rect x="6" y="6" width="88" height="88" fill="none" stroke="#999" stroke-width="4"/>
+    </svg>
+  </div>
+
+  <div class="slot" data-shape="triangle">
+    <svg width="100" height="100">
+      <polygon points="50,6 6,94 94,94"
+        fill="none" stroke="#999" stroke-width="4" stroke-linejoin="round"/>
+    </svg>
+  </div>
 </div>
 
-<!-- HÌNH KÉO -->
-<div class="shape circle" data-shape="circle" style="top:520px;left:50px"></div>
-<div class="shape square" data-shape="square" style="top:520px;left:150px"></div>
-<div class="shape triangle" data-shape="triangle" style="top:520px;left:250px"></div>
-<div class="shape rectangle" data-shape="rectangle" style="top:520px;left:360px"></div>
-<div class="shape diamond" data-shape="diamond" style="top:520px;left:520px"></div>
-<div class="shape star" data-shape="star" style="top:620px;left:50px"></div>
-<div class="shape heart" data-shape="heart" style="top:620px;left:150px"></div>
-<div class="shape half" data-shape="half" style="top:620px;left:250px"></div>
-<div class="shape trapezoid" data-shape="trapezoid" style="top:620px;left:360px"></div>
-<div class="shape hexagon" data-shape="hexagon" style="top:620px;left:520px"></div>
+<div class="shape circle" data-shape="circle" style="top:320px;left:150px"></div>
+<div class="shape square" data-shape="square" style="top:320px;left:300px"></div>
+<div class="shape triangle" data-shape="triangle" style="top:320px;left:450px"></div>
 
-<audio id="soundWin" src="hello.mp3"></audio>
+<!-- 🔊 ÂM THANH -->
+<audio id="soundWin" src="hello.mp3" preload="auto"></audio>
 
 <script>
 let active=null,ox=0,oy=0,startX=0,startY=0;
-const SNAP_DISTANCE=50;
+const SNAP_DISTANCE = 60;
 
+/* ===== MỞ KHÓA ÂM THANH CHO MOBILE ===== */
+let soundUnlocked = false;
+
+function unlockSound(){
+  if(soundUnlocked) return;
+  const s = document.getElementById("soundWin");
+  s.muted = true;
+  s.play().then(()=>{
+    s.pause();
+    s.currentTime = 0;
+    s.muted = false;
+    soundUnlocked = true;
+  }).catch(()=>{});
+}
+document.addEventListener("pointerdown", unlockSound, { once:true });
+
+/* ===== PHÁT ÂM THANH KHI ĐÚNG ===== */
 function playWinSound(){
-  const s=document.getElementById("soundWin");
-  s.currentTime=0;
+  const s = document.getElementById("soundWin");
+  s.currentTime = 0;
   s.play().catch(()=>{});
 }
 
-document.querySelectorAll(".shape").forEach(s=>{
-  s.addEventListener("pointerdown",e=>{
+document.querySelectorAll('.shape').forEach(s=>{
+  s.addEventListener('pointerdown',e=>{
     active=s;
     ox=e.clientX-s.offsetLeft;
     oy=e.clientY-s.offsetTop;
@@ -111,28 +104,32 @@ document.querySelectorAll(".shape").forEach(s=>{
   });
 });
 
-document.addEventListener("pointermove",e=>{
+document.addEventListener('pointermove',e=>{
   if(!active) return;
   active.style.left=e.clientX-ox+"px";
   active.style.top=e.clientY-oy+"px";
 });
 
-document.addEventListener("pointerup",()=>{
+document.addEventListener('pointerup',()=>{
   if(!active) return;
   let ok=false;
 
-  document.querySelectorAll(".slot").forEach(slot=>{
-    const a=active.getBoundingClientRect();
-    const b=slot.getBoundingClientRect();
-    const d=Math.hypot((a.left+45)-(b.left+45),(a.top+45)-(b.top+45));
-    const outline=slot.querySelector("*");
+  document.querySelectorAll('.slot').forEach(slot=>{
+    const shapeRect=active.getBoundingClientRect();
+    const slotRect=slot.getBoundingClientRect();
 
-    if(d<SNAP_DISTANCE){
+    const dx=(shapeRect.left+50)-(slotRect.left+50);
+    const dy=(shapeRect.top+50)-(slotRect.top+50);
+    const distance=Math.sqrt(dx*dx+dy*dy);
+
+    const outline=slot.querySelector("circle,rect,polygon");
+
+    if(distance < SNAP_DISTANCE){
       if(slot.dataset.shape===active.dataset.shape){
-        active.style.left=b.left+"px";
-        active.style.top=b.top+"px";
+        active.style.left=slotRect.left+"px";
+        active.style.top=slotRect.top+"px";
         outline.setAttribute("stroke","#4caf50");
-        playWinSound();
+        playWinSound(); // 🔊 CÓ TIẾNG TRÊN ĐIỆN THOẠI
         ok=true;
       }else{
         outline.setAttribute("stroke","#f44336");
@@ -146,6 +143,7 @@ document.addEventListener("pointerup",()=>{
     active.style.top=startY;
     setTimeout(()=>active.style.animation="",300);
   }
+
   active=null;
 });
 </script>
