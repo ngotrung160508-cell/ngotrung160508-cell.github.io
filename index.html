@@ -58,9 +58,19 @@ body{background:#f6f6f6;text-align:center;font-family:Arial}
 <div class="shape square" data-shape="square" style="top:320px;left:300px"></div>
 <div class="shape triangle" data-shape="triangle" style="top:320px;left:450px"></div>
 
+<!-- 🔊 ÂM THANH -->
+<audio id="soundWin" src="hello.mp3" preload="auto"></audio>
+
 <script>
 let active=null,ox=0,oy=0,startX=0,startY=0;
-const SNAP_DISTANCE = 60; // càng lớn càng dễ
+const SNAP_DISTANCE = 60;
+
+// 🔊 HÀM PHÁT ÂM THANH
+function playWinSound(){
+  const s = document.getElementById("soundWin");
+  s.currentTime = 0;
+  s.play().catch(()=>{});
+}
 
 document.querySelectorAll('.shape').forEach(s=>{
   s.addEventListener('pointerdown',e=>{
@@ -98,6 +108,7 @@ document.addEventListener('pointerup',()=>{
         active.style.left=slotRect.left+"px";
         active.style.top=slotRect.top+"px";
         outline.setAttribute("stroke","#4caf50");
+        playWinSound(); // 🔊 PHÁT ÂM THANH KHI ĐÚNG
         ok=true;
       }else{
         outline.setAttribute("stroke","#f44336");
