@@ -70,7 +70,23 @@ body{
 let active=null,ox=0,oy=0,startX=0,startY=0;
 const SNAP_DISTANCE = 60;
 
-// 🔊 HÀM PHÁT ÂM THANH
+/* ===== MỞ KHÓA ÂM THANH CHO MOBILE ===== */
+let soundUnlocked = false;
+
+function unlockSound(){
+  if(soundUnlocked) return;
+  const s = document.getElementById("soundWin");
+  s.muted = true;
+  s.play().then(()=>{
+    s.pause();
+    s.currentTime = 0;
+    s.muted = false;
+    soundUnlocked = true;
+  }).catch(()=>{});
+}
+document.addEventListener("pointerdown", unlockSound, { once:true });
+
+/* ===== PHÁT ÂM THANH KHI ĐÚNG ===== */
 function playWinSound(){
   const s = document.getElementById("soundWin");
   s.currentTime = 0;
@@ -113,7 +129,7 @@ document.addEventListener('pointerup',()=>{
         active.style.left=slotRect.left+"px";
         active.style.top=slotRect.top+"px";
         outline.setAttribute("stroke","#4caf50");
-        playWinSound(); // 🔊 PHÁT ÂM THANH KHI ĐÚNG
+        playWinSound(); // 🔊 CÓ TIẾNG TRÊN ĐIỆN THOẠI
         ok=true;
       }else{
         outline.setAttribute("stroke","#f44336");
