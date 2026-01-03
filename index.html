@@ -2,186 +2,181 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Xếp Hình Cùng CuMin</title>
+<title>Đua Xe Cùng Cậu Vàng</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
   margin:0;
-  min-height:100vh;
-  background:url("566468417_848104367567702_3502620964126312464_n.jpg") center/cover no-repeat;
+  background:#111;
+  overflow:hidden;
   font-family:Arial;
-  text-align:center;
+  touch-action:none;
 }
 
-/* TIÊU ĐỀ */
-h2{
-  color:#fff;
-  text-shadow:2px 2px 8px #000;
-  font-size:30px;
-  margin-top:20px;
+#game{
+  position:relative;
+  width:360px;
+  height:100vh;
+  margin:auto;
+  background:#555;
+  border-left:6px solid #fff;
+  border-right:6px solid #fff;
 }
 
-/* KHUNG GAME */
-.board{
-  display:inline-block;
-  margin-top:20px;
-  background:rgba(255,255,255,0.9);
-  padding:30px 40px;
-  border-radius:26px;
-  box-shadow:0 15px 35px rgba(0,0,0,0.35);
+/* VẠCH ĐƯỜNG */
+.line{
+  position:absolute;
+  width:8px;
+  height:40px;
+  background:#fff;
+  left:176px;
+  animation: road 1s linear infinite;
 }
 
-.game{
-  display:flex;
-  justify-content:center;
-  gap:40px;
+@keyframes road{
+  from{top:-40px}
+  to{top:100%}
 }
 
-/* SLOT */
-.slot{
-  width:110px;
-  height:110px;
+/* XE CẬU VÀNG */
+#bike{
+  position:absolute;
+  bottom:20px;
+  left:140px;
+  width:80px;
+  height:80px;
+  background:gold;
+  border-radius:20px;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:#fff;
-  border-radius:18px;
+  font-size:40px;
 }
 
-/* HÌNH KÉO */
-.shape{
-  width:100px;
-  height:100px;
+/* CHƯỚNG NGẠI */
+.obstacle{
   position:absolute;
-  cursor:pointer;
-  touch-action:none;
-  transition:0.15s;
+  width:50px;
+  height:50px;
+  background:#222;
+  border-radius:10px;
+  top:-60px;
 }
 
-.circle{background:#ff5252;border-radius:50%}
-.square{background:#4caf50}
-.triangle{
-  background:#2196f3;
-  clip-path:polygon(50% 0%,0% 100%,100% 100%);
+/* HUD */
+#score{
+  position:fixed;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  color:#fff;
+  font-size:20px;
 }
 
-/* RUNG KHI SAI */
-@keyframes shake{
-  0%,100%{transform:translateX(0)}
-  25%{transform:translateX(-6px)}
-  75%{transform:translateX(6px)}
+#over{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.8);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  font-size:26px;
+}
+button{
+  margin-top:15px;
+  padding:10px 20px;
+  font-size:18px;
 }
 </style>
 </head>
 
 <body>
 
-<h2>Xếp Hình Cùng CuMin</h2>
+<div id="score">Điểm: 0</div>
 
-<div class="board">
-  <div class="game">
-    <div class="slot" data-shape="circle">
-      <svg width="100" height="100">
-        <circle cx="50" cy="50" r="44" fill="none" stroke="#999" stroke-width="4"/>
-      </svg>
-    </div>
-
-    <div class="slot" data-shape="square">
-      <svg width="100" height="100">
-        <rect x="6" y="6" width="88" height="88" fill="none" stroke="#999" stroke-width="4"/>
-      </svg>
-    </div>
-
-    <div class="slot" data-shape="triangle">
-      <svg width="100" height="100">
-        <polygon points="50,6 6,94 94,94"
-          fill="none" stroke="#999" stroke-width="4" stroke-linejoin="round"/>
-      </svg>
-    </div>
-  </div>
+<div id="game">
+  <div id="bike">🐕</div>
 </div>
 
-<!-- HÌNH KÉO -->
-<div class="shape circle" data-shape="circle" style="top:380px;left:120px"></div>
-<div class="shape square" data-shape="square" style="top:380px;left:280px"></div>
-<div class="shape triangle" data-shape="triangle" style="top:380px;left:440px"></div>
-
-<!-- ÂM THANH -->
-<audio id="soundWin" src="hello.mp3" preload="auto"></audio>
+<div id="over">
+  💥 Cậu Vàng bị ngã!  
+  <button onclick="location.reload()">Chơi lại</button>
+</div>
 
 <script>
-let active=null,ox=0,oy=0,startX=0,startY=0;
-const SNAP_DISTANCE=60;
+const game=document.getElementById("game");
+const bike=document.getElementById("bike");
+const over=document.getElementById("over");
+const scoreEl=document.getElementById("score");
 
-/* MỞ KHÓA ÂM THANH MOBILE */
-let soundUnlocked=false;
-function unlockSound(){
-  if(soundUnlocked) return;
-  const s=document.getElementById("soundWin");
-  s.muted=true;
-  s.play().then(()=>{
-    s.pause(); s.currentTime=0; s.muted=false;
-    soundUnlocked=true;
-  }).catch(()=>{});
-}
-document.addEventListener("pointerdown",unlockSound,{once:true});
+let bikeX=140;
+let score=0;
+let speed=4;
+let playing=true;
 
-/* PHÁT ÂM THANH */
-function playWinSound(){
-  const s=document.getElementById("soundWin");
-  s.currentTime=0;
-  s.play().catch(()=>{});
+/* DI CHUYỂN */
+function move(x){
+  bikeX+=x;
+  bikeX=Math.max(0,Math.min(280,bikeX));
+  bike.style.left=bikeX+"px";
 }
 
-/* KÉO THẢ */
-document.querySelectorAll(".shape").forEach(s=>{
-  s.addEventListener("pointerdown",e=>{
-    active=s;
-    ox=e.clientX-s.offsetLeft;
-    oy=e.clientY-s.offsetTop;
-    startX=s.style.left;
-    startY=s.style.top;
-    s.setPointerCapture(e.pointerId);
-  });
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft") move(-30);
+  if(e.key==="ArrowRight") move(30);
 });
 
-document.addEventListener("pointermove",e=>{
-  if(!active) return;
-  active.style.left=e.clientX-ox+"px";
-  active.style.top=e.clientY-oy+"px";
+document.addEventListener("touchstart",e=>{
+  const x=e.touches[0].clientX;
+  if(x<window.innerWidth/2) move(-30);
+  else move(30);
 });
 
-document.addEventListener("pointerup",()=>{
-  if(!active) return;
-  let ok=false;
+/* VẠCH ĐƯỜNG */
+setInterval(()=>{
+  if(!playing) return;
+  const l=document.createElement("div");
+  l.className="line";
+  game.appendChild(l);
+  setTimeout(()=>l.remove(),1000);
+},300);
 
-  document.querySelectorAll(".slot").forEach(slot=>{
-    const a=active.getBoundingClientRect();
-    const b=slot.getBoundingClientRect();
-    const d=Math.hypot((a.left+50)-(b.left+50),(a.top+50)-(b.top+50));
-    const outline=slot.querySelector("*");
+/* CHƯỚNG NGẠI */
+function spawn(){
+  if(!playing) return;
+  const o=document.createElement("div");
+  o.className="obstacle";
+  o.style.left=Math.random()*280+"px";
+  game.appendChild(o);
 
-    if(d<SNAP_DISTANCE){
-      if(slot.dataset.shape===active.dataset.shape){
-        active.style.left=b.left+"px";
-        active.style.top=b.top+"px";
-        outline.setAttribute("stroke","#4caf50");
-        playWinSound();
-        ok=true;
-      }else{
-        outline.setAttribute("stroke","#f44336");
-      }
+  let y=-60;
+  const fall=setInterval(()=>{
+    if(!playing) return;
+    y+=speed;
+    o.style.top=y+"px";
+
+    const a=bike.getBoundingClientRect();
+    const b=o.getBoundingClientRect();
+    if(!(a.right<b.left||a.left>b.right||a.bottom<b.top||a.top>b.bottom)){
+      playing=false;
+      over.style.display="flex";
     }
-  });
 
-  if(!ok){
-    active.style.animation="shake 0.3s";
-    active.style.left=startX;
-    active.style.top=startY;
-    setTimeout(()=>active.style.animation="",300);
-  }
-  active=null;
-});
+    if(y>window.innerHeight){
+      clearInterval(fall);
+      o.remove();
+      score++;
+      scoreEl.innerText="Điểm: "+score;
+      if(score%5===0) speed++;
+    }
+  },20);
+}
+
+setInterval(spawn,1200);
 </script>
 
 </body>
