@@ -2,197 +2,172 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Mr.Hải Audio Shop</title>
+<title>Bản đồ Hà Nội</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:#0e0e0e;color:#fff}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{height:100vh}
 
-/* HEADER */
-header{
-  position:sticky;top:0;z-index:10;
-  background:#111;padding:15px 30px;
-  display:flex;justify-content:space-between;align-items:center
-}
-.logo{color:#f5c542;font-size:22px;font-weight:bold}
-nav a{color:#fff;text-decoration:none;margin-left:20px}
+#map{height:100vh;width:100vw}
 
-/* HERO */
-.hero{
-  padding:90px 20px;text-align:center;
-  background:linear-gradient(135deg,#1f1f1f,#000)
+/* Thanh tìm kiếm */
+.search-box{
+  position:absolute;
+  top:15px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#fff;
+  width:92%;
+  max-width:520px;
+  display:flex;
+  border-radius:30px;
+  box-shadow:0 4px 12px rgba(0,0,0,.35);
+  z-index:1000;
 }
-.hero h1{font-size:36px}
-.hero p{opacity:.8;margin:15px 0 25px}
-.hero button{
-  padding:14px 30px;background:#f5c542;
-  border:none;border-radius:30px;font-size:16px;cursor:pointer
+.search-box input{
+  flex:1;
+  padding:14px 20px;
+  border:none;
+  outline:none;
+  border-radius:30px;
+  font-size:16px;
 }
-
-/* SECTION */
-section{padding:70px 40px;text-align:center}
-h2{font-size:28px;margin-bottom:25px}
-
-/* PRODUCTS */
-.products{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:30px
-}
-.product{
-  background:#1b1b1b;padding:25px;border-radius:14px
-}
-.price{color:#f5c542;font-size:20px;margin:10px 0}
-.product button{
-  padding:10px 20px;background:#f5c542;
-  border:none;border-radius:20px;cursor:pointer
+.search-box button{
+  background:#1a73e8;
+  color:#fff;
+  border:none;
+  padding:0 24px;
+  border-radius:30px;
+  cursor:pointer;
 }
 
-/* CART */
-#cart{
-  position:fixed;right:20px;top:80px;
-  background:#1b1b1b;width:320px;
-  border-radius:14px;padding:20px;display:none
-}
-#cart h3{margin-bottom:15px}
-.cart-item{
-  display:flex;justify-content:space-between;
-  align-items:center;margin-bottom:10px;font-size:14px
-}
-.cart-item input{width:50px}
-.cart-total{margin-top:15px;color:#f5c542}
-.cart button{
-  width:100%;margin-top:15px;
-  padding:10px;background:#f5c542;border:none;border-radius:20px
+/* Logo */
+.logo{
+  position:absolute;
+  top:15px;
+  left:15px;
+  background:#fff;
+  padding:6px 12px;
+  border-radius:10px;
+  font-weight:bold;
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+  z-index:1000;
 }
 
-/* THANK YOU */
-#thankyou{
-  display:none;
-  padding:100px 20px;
-  text-align:center
-}
-#thankyou h1{color:#f5c542;font-size:40px;margin-bottom:20px}
-
-/* FOOTER */
-footer{
-  background:#000;text-align:center;
-  padding:15px;font-size:14px;opacity:.7
+/* Nút định vị */
+.locate{
+  position:absolute;
+  bottom:30px;
+  right:15px;
+  background:#fff;
+  padding:10px 14px;
+  border-radius:50%;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,.3);
+  z-index:1000;
+  font-size:18px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="logo">🎧 Mr.Hải Audio Shop</div>
-  <nav>
-    <a href="#products">Sản phẩm</a>
-    <a href="#" onclick="toggleCart()">🛒 Giỏ hàng</a>
-  </nav>
-</header>
+<div class="logo">🗺 Hà Nội Map</div>
 
-<div class="hero">
-  <h1>Âm thanh chuẩn gu – Nghe là mê</h1>
-  <p>Tai nghe • Loa • Karaoke gia đình</p>
-  <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
-    Xem sản phẩm
-  </button>
+<div class="search-box">
+  <input id="search" placeholder="Tìm đường, địa điểm tại Hà Nội">
+  <button onclick="searchPlace()">🔍</button>
 </div>
 
-<section id="products">
-  <h2>Sản phẩm</h2>
-  <div class="products">
-    <div class="product">
-      <h3>Tai nghe Hi-Fi X1</h3>
-      <p>Âm thanh chi tiết, bass sâu</p>
-      <div class="price">1.500.000₫</div>
-      <button onclick="addToCart('Tai nghe Hi-Fi X1',1500000)">Thêm vào giỏ</button>
-    </div>
+<div class="locate" onclick="locateMe()">📍</div>
 
-    <div class="product">
-      <h3>Loa Bluetooth Bass Pro</h3>
-      <p>Công suất mạnh, pin trâu</p>
-      <div class="price">2.800.000₫</div>
-      <button onclick="addToCart('Loa Bluetooth Bass Pro',2800000)">Thêm vào giỏ</button>
-    </div>
+<div id="map"></div>
 
-    <div class="product">
-      <h3>Combo Karaoke Gia Đình</h3>
-      <p>Micro + Loa + Vang số</p>
-      <div class="price">8.900.000₫</div>
-      <button onclick="addToCart('Combo Karaoke Gia Đình',8900000)">Thêm vào giỏ</button>
-    </div>
-  </div>
-</section>
-
-<!-- CART -->
-<div id="cart" class="cart">
-  <h3>🛒 Giỏ hàng</h3>
-  <div id="cartItems"></div>
-  <div class="cart-total">Tổng: <span id="total">0</span>₫</div>
-  <button onclick="checkout()">Thanh toán</button>
-</div>
-
-<!-- THANK YOU -->
-<div id="thankyou">
-  <h1>🎉 Cảm ơn bạn!</h1>
-  <p>Đơn hàng của bạn đã được ghi nhận.<br>
-  Mr.Hải Audio Shop sẽ liên hệ sớm nhất ❤️</p>
-</div>
-
-<footer>
-  © 2026 Mr.Hải Audio Shop
-</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-let cart = [];
+// Khởi tạo bản đồ Hà Nội
+let map = L.map('map', {
+  center:[21.0285,105.8542],
+  zoom:13
+});
 
-function toggleCart(){
-  const c = document.getElementById("cart");
-  c.style.display = c.style.display === "block" ? "none" : "block";
-}
+// Bản đồ thường
+let normal = L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {maxZoom:19}
+).addTo(map);
 
-function addToCart(name, price){
-  const item = cart.find(i => i.name === name);
-  if(item){
-    item.qty++;
-  }else{
-    cart.push({name,price,qty:1});
-  }
-  renderCart();
-  toggleCart();
-}
+// Bản đồ vệ tinh
+let satellite = L.tileLayer(
+  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  {maxZoom:19}
+);
 
-function renderCart(){
-  const list = document.getElementById("cartItems");
-  list.innerHTML = "";
-  let total = 0;
+// Chuyển lớp bản đồ
+L.control.layers(
+  {"🗺 Bản đồ":normal,"🛰 Vệ tinh":satellite},
+  null,
+  {position:'bottomleft'}
+).addTo(map);
 
-  cart.forEach((item,i)=>{
-    total += item.price * item.qty;
-    list.innerHTML += `
-      <div class="cart-item">
-        <span>${item.name}</span>
-        <input type="number" min="1" value="${item.qty}"
-        onchange="updateQty(${i},this.value)">
-      </div>`;
+let marker;
+
+// Click để ghim vị trí
+map.on('click',function(e){
+  if(marker) map.removeLayer(marker);
+  marker=L.marker(e.latlng).addTo(map)
+    .bindPopup(
+      `📍 Tọa độ:<br>
+      ${e.latlng.lat.toFixed(6)}, 
+      ${e.latlng.lng.toFixed(6)}`
+    )
+    .openPopup();
+});
+
+// Tìm kiếm địa điểm Hà Nội
+function searchPlace(){
+  let q=document.getElementById("search").value;
+  if(!q) return;
+
+  fetch(
+    `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${q}, Hà Nội`
+  )
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.length>0){
+      let lat=data[0].lat;
+      let lon=data[0].lon;
+      map.setView([lat,lon],16);
+      if(marker) map.removeLayer(marker);
+      marker=L.marker([lat,lon]).addTo(map)
+        .bindPopup(data[0].display_name)
+        .openPopup();
+    }else{
+      alert("Không tìm thấy địa điểm tại Hà Nội");
+    }
   });
-
-  document.getElementById("total").innerText = total.toLocaleString("vi-VN");
 }
 
-function updateQty(i,val){
-  cart[i].qty = parseInt(val);
-  renderCart();
+// Định vị vị trí hiện tại
+function locateMe(){
+  map.locate({setView:true,maxZoom:16});
 }
 
-function checkout(){
-  cart = [];
-  document.body.innerHTML = document.getElementById("thankyou").outerHTML;
-  document.getElementById("thankyou").style.display="block";
-}
+map.on('locationfound',function(e){
+  if(marker) map.removeLayer(marker);
+  marker=L.marker(e.latlng).addTo(map)
+    .bindPopup("📍 Vị trí của bạn")
+    .openPopup();
+});
+
+map.on('locationerror',function(){
+  alert("Không thể lấy vị trí");
+});
 </script>
 
 </body>
