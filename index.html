@@ -2,173 +2,197 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Flappy Vàng</title>
+<title>Mr.Hải Audio Shop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body {
-    margin: 0;
-    overflow: hidden;
-    background: #70c5ce;
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#0e0e0e;color:#fff}
+
+/* HEADER */
+header{
+  position:sticky;top:0;z-index:10;
+  background:#111;padding:15px 30px;
+  display:flex;justify-content:space-between;align-items:center
 }
-canvas {
-    display: block;
-    margin: auto;
+.logo{color:#f5c542;font-size:22px;font-weight:bold}
+nav a{color:#fff;text-decoration:none;margin-left:20px}
+
+/* HERO */
+.hero{
+  padding:90px 20px;text-align:center;
+  background:linear-gradient(135deg,#1f1f1f,#000)
+}
+.hero h1{font-size:36px}
+.hero p{opacity:.8;margin:15px 0 25px}
+.hero button{
+  padding:14px 30px;background:#f5c542;
+  border:none;border-radius:30px;font-size:16px;cursor:pointer
+}
+
+/* SECTION */
+section{padding:70px 40px;text-align:center}
+h2{font-size:28px;margin-bottom:25px}
+
+/* PRODUCTS */
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:30px
+}
+.product{
+  background:#1b1b1b;padding:25px;border-radius:14px
+}
+.price{color:#f5c542;font-size:20px;margin:10px 0}
+.product button{
+  padding:10px 20px;background:#f5c542;
+  border:none;border-radius:20px;cursor:pointer
+}
+
+/* CART */
+#cart{
+  position:fixed;right:20px;top:80px;
+  background:#1b1b1b;width:320px;
+  border-radius:14px;padding:20px;display:none
+}
+#cart h3{margin-bottom:15px}
+.cart-item{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:10px;font-size:14px
+}
+.cart-item input{width:50px}
+.cart-total{margin-top:15px;color:#f5c542}
+.cart button{
+  width:100%;margin-top:15px;
+  padding:10px;background:#f5c542;border:none;border-radius:20px
+}
+
+/* THANK YOU */
+#thankyou{
+  display:none;
+  padding:100px 20px;
+  text-align:center
+}
+#thankyou h1{color:#f5c542;font-size:40px;margin-bottom:20px}
+
+/* FOOTER */
+footer{
+  background:#000;text-align:center;
+  padding:15px;font-size:14px;opacity:.7
 }
 </style>
 </head>
+
 <body>
 
-<canvas id="game" width="400" height="600"></canvas>
+<header>
+  <div class="logo">🎧 Mr.Hải Audio Shop</div>
+  <nav>
+    <a href="#products">Sản phẩm</a>
+    <a href="#" onclick="toggleCart()">🛒 Giỏ hàng</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>Âm thanh chuẩn gu – Nghe là mê</h1>
+  <p>Tai nghe • Loa • Karaoke gia đình</p>
+  <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+    Xem sản phẩm
+  </button>
+</div>
+
+<section id="products">
+  <h2>Sản phẩm</h2>
+  <div class="products">
+    <div class="product">
+      <h3>Tai nghe Hi-Fi X1</h3>
+      <p>Âm thanh chi tiết, bass sâu</p>
+      <div class="price">1.500.000₫</div>
+      <button onclick="addToCart('Tai nghe Hi-Fi X1',1500000)">Thêm vào giỏ</button>
+    </div>
+
+    <div class="product">
+      <h3>Loa Bluetooth Bass Pro</h3>
+      <p>Công suất mạnh, pin trâu</p>
+      <div class="price">2.800.000₫</div>
+      <button onclick="addToCart('Loa Bluetooth Bass Pro',2800000)">Thêm vào giỏ</button>
+    </div>
+
+    <div class="product">
+      <h3>Combo Karaoke Gia Đình</h3>
+      <p>Micro + Loa + Vang số</p>
+      <div class="price">8.900.000₫</div>
+      <button onclick="addToCart('Combo Karaoke Gia Đình',8900000)">Thêm vào giỏ</button>
+    </div>
+  </div>
+</section>
+
+<!-- CART -->
+<div id="cart" class="cart">
+  <h3>🛒 Giỏ hàng</h3>
+  <div id="cartItems"></div>
+  <div class="cart-total">Tổng: <span id="total">0</span>₫</div>
+  <button onclick="checkout()">Thanh toán</button>
+</div>
+
+<!-- THANK YOU -->
+<div id="thankyou">
+  <h1>🎉 Cảm ơn bạn!</h1>
+  <p>Đơn hàng của bạn đã được ghi nhận.<br>
+  Mr.Hải Audio Shop sẽ liên hệ sớm nhất ❤️</p>
+</div>
+
+<footer>
+  © 2026 Mr.Hải Audio Shop
+</footer>
 
 <script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+let cart = [];
 
-// ===== DOGE =====
-let dog = {
-    x: 100,
-    y: 250,
-    r: 30,
-    gravity: 0.35,
-    lift: -7,
-    velocity: 0
-};
-
-// ===== GAME =====
-let pipes = [];
-let pipeWidth = 65;
-let gap = 190;
-let frame = 0;
-let score = 0;
-let gameOver = false;
-
-document.addEventListener("keydown", jump);
-document.addEventListener("click", jump);
-
-function jump() {
-    if (!gameOver) dog.velocity = dog.lift;
-    else resetGame();
+function toggleCart(){
+  const c = document.getElementById("cart");
+  c.style.display = c.style.display === "block" ? "none" : "block";
 }
 
-function resetGame() {
-    pipes = [];
-    dog.y = 250;
-    dog.velocity = 0;
-    score = 0;
-    frame = 0;
-    gameOver = false;
+function addToCart(name, price){
+  const item = cart.find(i => i.name === name);
+  if(item){
+    item.qty++;
+  }else{
+    cart.push({name,price,qty:1});
+  }
+  renderCart();
+  toggleCart();
 }
 
-function update() {
-    if (gameOver) return;
+function renderCart(){
+  const list = document.getElementById("cartItems");
+  list.innerHTML = "";
+  let total = 0;
 
-    frame++;
-    dog.velocity += dog.gravity;
-    dog.y += dog.velocity;
+  cart.forEach((item,i)=>{
+    total += item.price * item.qty;
+    list.innerHTML += `
+      <div class="cart-item">
+        <span>${item.name}</span>
+        <input type="number" min="1" value="${item.qty}"
+        onchange="updateQty(${i},this.value)">
+      </div>`;
+  });
 
-    if (frame % 120 === 0) {
-        let top = Math.random() * 180 + 60;
-        pipes.push({
-            x: canvas.width,
-            top,
-            bottom: top + gap
-        });
-    }
-
-    for (let i = pipes.length - 1; i >= 0; i--) {
-        pipes[i].x -= 1.5;
-
-        if (
-            dog.x + dog.r > pipes[i].x &&
-            dog.x - dog.r < pipes[i].x + pipeWidth &&
-            (dog.y - dog.r < pipes[i].top ||
-             dog.y + dog.r > pipes[i].bottom)
-        ) gameOver = true;
-
-        if (pipes[i].x + pipeWidth < 0) {
-            pipes.splice(i, 1);
-            score++;
-        }
-    }
-
-    if (dog.y + dog.r > canvas.height || dog.y - dog.r < 0) {
-        gameOver = true;
-    }
+  document.getElementById("total").innerText = total.toLocaleString("vi-VN");
 }
 
-// ===== DRAW DOG =====
-function drawDogFace(x, y, r) {
-    let grad = ctx.createRadialGradient(x - r/3, y - r/3, r/3, x, y, r);
-    grad.addColorStop(0, "#FFF1C1");
-    grad.addColorStop(1, "#E3A94B");
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = "#111";
-    ctx.beginPath();
-    ctx.arc(x - r*0.35, y - r*0.1, r*0.12, 0, Math.PI*2);
-    ctx.arc(x + r*0.35, y - r*0.1, r*0.12, 0, Math.PI*2);
-    ctx.fill();
-
-    ctx.fillStyle = "#111";
-    ctx.beginPath();
-    ctx.arc(x, y + r*0.2, r*0.13, 0, Math.PI*2);
-    ctx.fill();
+function updateQty(i,val){
+  cart[i].qty = parseInt(val);
+  renderCart();
 }
 
-// ===== DRAW PIPE (RÕ – DỄ NHÌN) =====
-function drawPipe(x, y, h, isTop) {
-    // Gradient thân cột
-    let grad = ctx.createLinearGradient(x, 0, x + pipeWidth, 0);
-    grad.addColorStop(0, "#2E3440");
-    grad.addColorStop(1, "#4C566A");
-    ctx.fillStyle = grad;
-    ctx.fillRect(x, y, pipeWidth, h);
-
-    // Viền sáng
-    ctx.strokeStyle = "#ECEFF4";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(x, y, pipeWidth, h);
-
-    // Miệng cột
-    ctx.fillStyle = "#D8DEE9";
-    if (isTop) {
-        ctx.fillRect(x - 3, h - 15, pipeWidth + 6, 15);
-    } else {
-        ctx.fillRect(x - 3, y, pipeWidth + 6, 15);
-    }
+function checkout(){
+  cart = [];
+  document.body.innerHTML = document.getElementById("thankyou").outerHTML;
+  document.getElementById("thankyou").style.display="block";
 }
-
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    drawDogFace(dog.x, dog.y, dog.r);
-
-    pipes.forEach(p => {
-        drawPipe(p.x, 0, p.top, true);
-        drawPipe(p.x, p.bottom, canvas.height - p.bottom, false);
-    });
-
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "26px Arial";
-    ctx.fillText("Flappy Vàng: " + score, 20, 40);
-
-    if (gameOver) {
-        ctx.fillStyle = "#BF616A";
-        ctx.font = "36px Arial";
-        ctx.fillText("GAME OVER", 80, 300);
-        ctx.font = "18px Arial";
-        ctx.fillText("Nhấn phím hoặc click để chơi lại", 60, 335);
-    }
-}
-
-function loop() {
-    update();
-    draw();
-    requestAnimationFrame(loop);
-}
-loop();
 </script>
 
 </body>
