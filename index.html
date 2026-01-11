@@ -2,173 +2,202 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Bản đồ Hà Nội</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Leaflet -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-
+<title>Block Blast - Hiển thị Block</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{height:100vh}
-
-#map{height:100vh;width:100vw}
-
-/* Thanh tìm kiếm */
-.search-box{
-  position:absolute;
-  top:15px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#fff;
-  width:92%;
-  max-width:520px;
-  display:flex;
-  border-radius:30px;
-  box-shadow:0 4px 12px rgba(0,0,0,.35);
-  z-index:1000;
-}
-.search-box input{
-  flex:1;
-  padding:14px 20px;
-  border:none;
-  outline:none;
-  border-radius:30px;
-  font-size:16px;
-}
-.search-box button{
-  background:#1a73e8;
-  color:#fff;
-  border:none;
-  padding:0 24px;
-  border-radius:30px;
-  cursor:pointer;
-}
-
-/* Logo */
-.logo{
-  position:absolute;
-  top:15px;
-  left:15px;
-  background:#fff;
-  padding:6px 12px;
-  border-radius:10px;
-  font-weight:bold;
-  box-shadow:0 2px 6px rgba(0,0,0,.2);
-  z-index:1000;
-}
-
-/* Nút định vị */
-.locate{
-  position:absolute;
-  bottom:30px;
-  right:15px;
-  background:#fff;
-  padding:10px 14px;
-  border-radius:50%;
-  cursor:pointer;
-  box-shadow:0 4px 10px rgba(0,0,0,.3);
-  z-index:1000;
-  font-size:18px;
-}
+body {margin:0;padding:0;font-family:sans-serif;background:#f0f0f0;display:flex;flex-direction:column;align-items:center;}
+h1{margin:20px;}
+canvas{background:#fff;margin-top:10px;border:2px solid #333;}
+#score{font-size:20px;margin-top:10px;}
+#gameover{display:none;font-size:24px;color:red;margin-top:20px;}
 </style>
 </head>
-
 <body>
-
-<div class="logo">🗺 Hà Nội Map</div>
-
-<div class="search-box">
-  <input id="search" placeholder="Tìm đường, địa điểm tại Hà Nội">
-  <button onclick="searchPlace()">🔍</button>
-</div>
-
-<div class="locate" onclick="locateMe()">📍</div>
-
-<div id="map"></div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<h1>Block Blast - Xếp Block</h1>
+<div id="score">Điểm: 0</div>
+<div id="gameover">GAME OVER!</div>
+<canvas id="game" width="500" height="550"></canvas>
 
 <script>
-// Khởi tạo bản đồ Hà Nội
-let map = L.map('map', {
-  center:[21.0285,105.8542],
-  zoom:13
-});
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const gridSize = 9;
+const cellSize = 50;
+let grid = [], score = 0, gameOver = false;
 
-// Bản đồ thường
-let normal = L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {maxZoom:19}
-).addTo(map);
+// Khởi tạo grid
+for(let r=0;r<gridSize;r++){
+  grid[r]=[];
+  for(let c=0;c<gridSize;c++) grid[r][c]=0;
+}
 
-// Bản đồ vệ tinh
-let satellite = L.tileLayer(
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-  {maxZoom:19}
-);
+// Màu block
+const colors = ['#ff4d4d','#4dff4d','#4db8ff','#ffe64d','#ff99ff','#ff9933'];
 
-// Chuyển lớp bản đồ
-L.control.layers(
-  {"🗺 Bản đồ":normal,"🛰 Vệ tinh":satellite},
-  null,
-  {position:'bottomleft'}
-).addTo(map);
+// Block types (mảng 2D)
+const blockTypes = [
+[[1]], // 1x1
+[[1,1]], // 1x2
+[[1],[1]], //2x1
+[[1,1],[1,1]], //2x2
+[[1,1,1],[0,1,0]], //T
+[[1,1,0],[0,1,1]], //Z
+[[1,0],[1,1]] //L
+];
 
-let marker;
+let currentBlocks = [], dragBlock = null, offsetX=0, offsetY=0;
 
-// Click để ghim vị trí
-map.on('click',function(e){
-  if(marker) map.removeLayer(marker);
-  marker=L.marker(e.latlng).addTo(map)
-    .bindPopup(
-      `📍 Tọa độ:<br>
-      ${e.latlng.lat.toFixed(6)}, 
-      ${e.latlng.lng.toFixed(6)}`
-    )
-    .openPopup();
-});
+// Tạo 3 block mới
+function generateBlocks(){
+  currentBlocks=[];
+  for(let i=0;i<3;i++){
+    const type = JSON.parse(JSON.stringify(blockTypes[Math.floor(Math.random()*blockTypes.length)]));
+    const color = colors[Math.floor(Math.random()*colors.length)];
+    currentBlocks.push({shape:type,color:x=color,x:10+i*150,y:460});
+  }
+  draw();
+}
 
-// Tìm kiếm địa điểm Hà Nội
-function searchPlace(){
-  let q=document.getElementById("search").value;
-  if(!q) return;
-
-  fetch(
-    `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${q}, Hà Nội`
-  )
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.length>0){
-      let lat=data[0].lat;
-      let lon=data[0].lon;
-      map.setView([lat,lon],16);
-      if(marker) map.removeLayer(marker);
-      marker=L.marker([lat,lon]).addTo(map)
-        .bindPopup(data[0].display_name)
-        .openPopup();
-    }else{
-      alert("Không tìm thấy địa điểm tại Hà Nội");
+// Vẽ grid + blocks
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // grid
+  for(let r=0;r<gridSize;r++){
+    for(let c=0;c<gridSize;c++){
+      ctx.fillStyle = grid[r][c]||'#fff';
+      ctx.fillRect(c*cellSize,r*cellSize,cellSize,cellSize);
+      ctx.strokeStyle='#ccc';
+      ctx.strokeRect(c*cellSize,r*cellSize,cellSize,cellSize);
+    }
+  }
+  // blocks
+  currentBlocks.forEach(b=>{
+    for(let i=0;i<b.shape.length;i++){
+      for(let j=0;j<b.shape[0].length;j++){
+        if(b.shape[i][j]===1){
+          ctx.fillStyle=b.color;
+          ctx.fillRect(b.x+j*cellSize,b.y+i*cellSize,cellSize,cellSize);
+          ctx.strokeStyle='#333';
+          ctx.strokeRect(b.x+j*cellSize,b.y+i*cellSize,cellSize,cellSize);
+        }
+      }
     }
   });
+  document.getElementById('score').innerText='Điểm: '+score;
 }
 
-// Định vị vị trí hiện tại
-function locateMe(){
-  map.locate({setView:true,maxZoom:16});
+// Lấy vị trí chuột
+function getMousePos(evt){
+  const rect = canvas.getBoundingClientRect();
+  return {x:evt.clientX-rect.left,y:evt.clientY-rect.top};
 }
 
-map.on('locationfound',function(e){
-  if(marker) map.removeLayer(marker);
-  marker=L.marker(e.latlng).addTo(map)
-    .bindPopup("📍 Vị trí của bạn")
-    .openPopup();
+// Kéo thả
+canvas.addEventListener('mousedown',e=>{
+  if(gameOver) return;
+  const pos = getMousePos(e);
+  currentBlocks.forEach(b=>{
+    for(let i=0;i<b.shape.length;i++){
+      for(let j=0;j<b.shape[0].length;j++){
+        if(b.shape[i][j]===1){
+          const bx = b.x+j*cellSize;
+          const by = b.y+i*cellSize;
+          if(pos.x>=bx && pos.x<=bx+cellSize && pos.y>=by && pos.y<=by+cellSize){
+            dragBlock = b;
+            offsetX = pos.x-b.x;
+            offsetY = pos.y-b.y;
+          }
+        }
+      }
+    }
+  });
 });
 
-map.on('locationerror',function(){
-  alert("Không thể lấy vị trí");
+canvas.addEventListener('mousemove',e=>{
+  if(dragBlock){
+    const pos = getMousePos(e);
+    dragBlock.x = pos.x - offsetX;
+    dragBlock.y = pos.y - offsetY;
+    draw();
+  }
 });
+
+canvas.addEventListener('mouseup',e=>{
+  if(dragBlock){
+    const r = Math.round(dragBlock.y/cellSize);
+    const c = Math.round(dragBlock.x/cellSize);
+    if(canPlace(r,c,dragBlock.shape)){
+      placeBlock(r,c,dragBlock);
+      checkLines();
+      if(checkGameOver()) endGame();
+    }
+    dragBlock = null;
+    draw();
+  }
+});
+
+// Kiểm tra đặt block
+function canPlace(r,c,shape){
+  for(let i=0;i<shape.length;i++){
+    for(let j=0;j<shape[0].length;j++){
+      if(shape[i][j]===1){
+        const rr=r+i,cc=c+j;
+        if(rr<0||rr>=gridSize||cc<0||cc>=gridSize||grid[rr][cc]!==0) return false;
+      }
+    }
+  }
+  return true;
+}
+
+function placeBlock(r,c,block){
+  for(let i=0;i<block.shape.length;i++){
+    for(let j=0;j<block.shape[0].length;j++){
+      if(block.shape[i][j]===1){
+        grid[r+i][c+j]=block.color;
+      }
+    }
+  }
+  currentBlocks=currentBlocks.filter(b=>b!==block);
+  if(currentBlocks.length===0) generateBlocks();
+}
+
+// Xóa hàng/cột
+function checkLines(){
+  let cleared=0;
+  for(let r=0;r<gridSize;r++){
+    if(grid[r].every(v=>v!==0)){
+      cleared++;
+      for(let c=0;c<gridSize;c++) grid[r][c]=0;
+    }
+  }
+  for(let c=0;c<gridSize;c++){
+    let full=true;
+    for(let r=0;r<gridSize;r++) if(grid[r][c]===0) full=false;
+    if(full){
+      cleared++;
+      for(let r=0;r<gridSize;r++) grid[r][c]=0;
+    }
+  }
+  if(cleared>0) score+=cleared*10;
+}
+
+// Game over
+function checkGameOver(){
+  for(let b of currentBlocks){
+    for(let r=0;r<gridSize;r++){
+      for(let c=0;c<gridSize;c++){
+        if(canPlace(r,c,b.shape)) return false;
+      }
+    }
+  }
+  return true;
+}
+function endGame(){
+  gameOver=true;
+  document.getElementById('gameover').style.display='block';
+}
+
+generateBlocks();
+draw();
 </script>
-
 </body>
 </html>
