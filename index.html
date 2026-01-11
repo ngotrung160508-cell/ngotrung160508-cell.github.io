@@ -2,18 +2,19 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Block Blast - Mr.Gold</title>
-<style> 
+<title>Block Blast - Mobile & High Score</title>
+<style>
 body {margin:0;padding:0;font-family:sans-serif;background:#f0f0f0;display:flex;flex-direction:column;align-items:center;}
 h1{margin:20px;}
-canvas{background:#fff;margin-top:10px;border:2px solid #333;}
-#score{font-size:20px;margin-top:10px;}
+canvas{background:#fff;margin-top:10px;border:2px solid #333;touch-action:none;}
+#score,#highscore{font-size:20px;margin-top:10px;}
 #gameover{display:none;font-size:24px;color:red;margin-top:20px;}
 </style>
 </head>
 <body>
-<h1>Block Blast - Mr.Gold</h1>
+<h1>Block Blast - Mobile & High Score</h1>
 <div id="score">Điểm: 0</div>
+<div id="highscore">Kỷ lục: 0</div>
 <div id="gameover">GAME OVER!</div>
 <canvas id="game" width="500" height="550"></canvas>
 
@@ -23,6 +24,7 @@ const ctx = canvas.getContext('2d');
 const gridSize = 9;
 const cellSize = 50;
 let grid = [], score = 0, gameOver = false;
+let highScore = localStorage.getItem('blockBlastHigh') || 0;
 
 // Khởi tạo grid
 for(let r=0;r<gridSize;r++){
@@ -95,17 +97,18 @@ function draw(){
     if(e.alpha<=0) effects.splice(i,1);
   });
   document.getElementById('score').innerText='Điểm: '+score;
-  requestAnimationFrame(draw);
+  document.getElementById('highscore').innerText='Kỷ lục: '+highScore;
+  if(!gameOver) requestAnimationFrame(draw);
 }
 
-// Lấy vị trí chuột
+// Lấy vị trí chuột/touch
 function getMousePos(evt){
   const rect = canvas.getBoundingClientRect();
-  return {x:evt.clientX-rect.left,y:evt.clientY-rect.top};
+  return {x:evt.clientX-rect.left||evt.pageX-rect.left, y:evt.clientY-rect.top||evt.pageY-rect.top};
 }
 
-// Kéo thả
-canvas.addEventListener('mousedown',e=>{
+// Kéo thả chuột
+canvas.addEventListener('mousedown', e=>{
   if(gameOver) return;
   const pos = getMousePos(e);
   currentBlocks.forEach(b=>{
@@ -124,16 +127,59 @@ canvas.addEventListener('mousedown',e=>{
     }
   });
 });
-
-canvas.addEventListener('mousemove',e=>{
+canvas.addEventListener('mousemove', e=>{
   if(dragBlock){
     const pos = getMousePos(e);
     dragBlock.x = pos.x - offsetX;
     dragBlock.y = pos.y - offsetY;
   }
 });
+canvas.addEventListener('mouseup', e=>{
+  if(dragBlock){
+    const r = Math.round(dragBlock.y/cellSize);
+    const c = Math.round(dragBlock.x/cellSize);
+    if(canPlace(r,c,dragBlock.shape)){
+      placeBlock(r,c,dragBlock);
+      checkLines();
+      if(checkGameOver()) endGame();
+    }
+    dragBlock = null;
+  }
+});
 
-canvas.addEventListener('mouseup',e=>{
+// Kéo thả cảm ứng điện thoại
+canvas.addEventListener('touchstart', e=>{
+  e.preventDefault();
+  if(gameOver) return;
+  const touch = e.touches[0];
+  const pos = getMousePos(touch);
+  currentBlocks.forEach(b=>{
+    for(let i=0;i<b.shape.length;i++){
+      for(let j=0;j<b.shape[0].length;j++){
+        if(b.shape[i][j]===1){
+          const bx = b.x+j*cellSize;
+          const by = b.y+i*cellSize;
+          if(pos.x>=bx && pos.x<=bx+cellSize && pos.y>=by && pos.y<=by+cellSize){
+            dragBlock = b;
+            offsetX = pos.x-b.x;
+            offsetY = pos.y-b.y;
+          }
+        }
+      }
+    }
+  });
+});
+canvas.addEventListener('touchmove', e=>{
+  e.preventDefault();
+  if(dragBlock){
+    const touch = e.touches[0];
+    const pos = getMousePos(touch);
+    dragBlock.x = pos.x - offsetX;
+    dragBlock.y = pos.y - offsetY;
+  }
+});
+canvas.addEventListener('touchend', e=>{
+  e.preventDefault();
   if(dragBlock){
     const r = Math.round(dragBlock.y/cellSize);
     const c = Math.round(dragBlock.x/cellSize);
@@ -171,7 +217,7 @@ function placeBlock(r,c,block){
   if(currentBlocks.length===0) generateBlocks();
 }
 
-// Xóa hàng/cột + tạo hiệu ứng ăn điểm
+// Xóa hàng/cột + hiệu ứng ăn điểm
 function checkLines(){
   let cleared=0;
   // rows
@@ -199,16 +245,10 @@ function checkLines(){
   if(cleared>0) score += cleared*10;
 }
 
-// Tạo hiệu ứng ăn điểm
+// Hiệu ứng ăn điểm
 function spawnEffect(x,y,color){
   for(let i=0;i<10;i++){
-    effects.push({
-      x:x,
-      y:y,
-      color:color||colors[Math.floor(Math.random()*colors.length)],
-      size:5,
-      alpha:1
-    });
+    effects.push({x:x,y:y,color:color||colors[Math.floor(Math.random()*colors.length)],size:5,alpha:1});
   }
 }
 
@@ -226,6 +266,11 @@ function checkGameOver(){
 function endGame(){
   gameOver=true;
   document.getElementById('gameover').style.display='block';
+  if(score>highScore){
+    highScore = score;
+    localStorage.setItem('blockBlastHigh',highScore);
+    alert('🎉 Chúc mừng! Bạn đã lập kỷ lục mới: '+highScore);
+  }
 }
 
 generateBlocks();
