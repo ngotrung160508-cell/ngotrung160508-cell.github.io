@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Block Blast - Hiển thị Block</title>
+<title>Block Blast - Hiệu ứng ăn điểm</title>
 <style>
 body {margin:0;padding:0;font-family:sans-serif;background:#f0f0f0;display:flex;flex-direction:column;align-items:center;}
 h1{margin:20px;}
@@ -12,7 +12,7 @@ canvas{background:#fff;margin-top:10px;border:2px solid #333;}
 </style>
 </head>
 <body>
-<h1>Block Blast - Xếp Block</h1>
+<h1>Block Blast - Hiệu ứng ăn điểm</h1>
 <div id="score">Điểm: 0</div>
 <div id="gameover">GAME OVER!</div>
 <canvas id="game" width="500" height="550"></canvas>
@@ -33,7 +33,7 @@ for(let r=0;r<gridSize;r++){
 // Màu block
 const colors = ['#ff4d4d','#4dff4d','#4db8ff','#ffe64d','#ff99ff','#ff9933'];
 
-// Block types (mảng 2D)
+// Block types
 const blockTypes = [
 [[1]], // 1x1
 [[1,1]], // 1x2
@@ -45,6 +45,7 @@ const blockTypes = [
 ];
 
 let currentBlocks = [], dragBlock = null, offsetX=0, offsetY=0;
+let effects = [];
 
 // Tạo 3 block mới
 function generateBlocks(){
@@ -57,7 +58,7 @@ function generateBlocks(){
   draw();
 }
 
-// Vẽ grid + blocks
+// Vẽ grid + blocks + hiệu ứng
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   // grid
@@ -82,7 +83,19 @@ function draw(){
       }
     }
   });
+  // hiệu ứng ăn điểm
+  effects.forEach((e,i)=>{
+    ctx.fillStyle=e.color;
+    ctx.globalAlpha=e.alpha;
+    ctx.beginPath();
+    ctx.arc(e.x,e.y,e.size,0,2*Math.PI);
+    ctx.fill();
+    ctx.globalAlpha=1;
+    e.y -= 1; e.alpha -= 0.02; e.size += 0.3;
+    if(e.alpha<=0) effects.splice(i,1);
+  });
   document.getElementById('score').innerText='Điểm: '+score;
+  requestAnimationFrame(draw);
 }
 
 // Lấy vị trí chuột
@@ -117,7 +130,6 @@ canvas.addEventListener('mousemove',e=>{
     const pos = getMousePos(e);
     dragBlock.x = pos.x - offsetX;
     dragBlock.y = pos.y - offsetY;
-    draw();
   }
 });
 
@@ -131,7 +143,6 @@ canvas.addEventListener('mouseup',e=>{
       if(checkGameOver()) endGame();
     }
     dragBlock = null;
-    draw();
   }
 });
 
@@ -160,24 +171,45 @@ function placeBlock(r,c,block){
   if(currentBlocks.length===0) generateBlocks();
 }
 
-// Xóa hàng/cột
+// Xóa hàng/cột + tạo hiệu ứng ăn điểm
 function checkLines(){
   let cleared=0;
+  // rows
   for(let r=0;r<gridSize;r++){
     if(grid[r].every(v=>v!==0)){
       cleared++;
-      for(let c=0;c<gridSize;c++) grid[r][c]=0;
+      for(let c=0;c<gridSize;c++){
+        spawnEffect(c*cellSize+cellSize/2,r*cellSize+cellSize/2,grid[r][c]);
+        grid[r][c]=0;
+      }
     }
   }
+  // cols
   for(let c=0;c<gridSize;c++){
     let full=true;
     for(let r=0;r<gridSize;r++) if(grid[r][c]===0) full=false;
     if(full){
       cleared++;
-      for(let r=0;r<gridSize;r++) grid[r][c]=0;
+      for(let r=0;r<gridSize;r++){
+        spawnEffect(c*cellSize+cellSize/2,r*cellSize+cellSize/2,grid[r][c]);
+        grid[r][c]=0;
+      }
     }
   }
-  if(cleared>0) score+=cleared*10;
+  if(cleared>0) score += cleared*10;
+}
+
+// Tạo hiệu ứng ăn điểm
+function spawnEffect(x,y,color){
+  for(let i=0;i<10;i++){
+    effects.push({
+      x:x,
+      y:y,
+      color:color||colors[Math.floor(Math.random()*colors.length)],
+      size:5,
+      alpha:1
+    });
+  }
 }
 
 // Game over
