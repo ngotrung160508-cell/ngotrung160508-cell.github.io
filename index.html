@@ -2,17 +2,17 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Block Blast - Mobile & High Score</title>
+<title>Mr.Gold - Mobile & High Score</title>
 <style>
-body {margin:0;padding:0;font-family:sans-serif;background:#f0f0f0;display:flex;flex-direction:column;align-items:center;}
-h1{margin:20px;}
+body {margin:0;padding:0;font-family:sans-serif;background:#f8f4e3;display:flex;flex-direction:column;align-items:center;}
+h1{margin:20px;color:#b8860b;}
 canvas{background:#fff;margin-top:10px;border:2px solid #333;touch-action:none;}
-#score,#highscore{font-size:20px;margin-top:10px;}
+#score,#highscore{font-size:20px;margin-top:10px;color:#b8860b;}
 #gameover{display:none;font-size:24px;color:red;margin-top:20px;}
 </style>
 </head>
 <body>
-<h1>Block Blast - Mobile & High Score</h1>
+<h1>Mr.Gold</h1>
 <div id="score">Điểm: 0</div>
 <div id="highscore">Kỷ lục: 0</div>
 <div id="gameover">GAME OVER!</div>
@@ -24,7 +24,7 @@ const ctx = canvas.getContext('2d');
 const gridSize = 9;
 const cellSize = 50;
 let grid = [], score = 0, gameOver = false;
-let highScore = localStorage.getItem('blockBlastHigh') || 0;
+let highScore = localStorage.getItem('mrGoldHigh') || 0;
 
 // Khởi tạo grid
 for(let r=0;r<gridSize;r++){
@@ -32,8 +32,8 @@ for(let r=0;r<gridSize;r++){
   for(let c=0;c<gridSize;c++) grid[r][c]=0;
 }
 
-// Màu block
-const colors = ['#ff4d4d','#4dff4d','#4db8ff','#ffe64d','#ff99ff','#ff9933'];
+// Màu vàng bóng
+const colors = ['#FFD700','#FFC700','#FFB800','#FFAA00','#FF9900','#FF8800'];
 
 // Block types
 const blockTypes = [
@@ -268,7 +268,7 @@ function endGame(){
   document.getElementById('gameover').style.display='block';
   if(score>highScore){
     highScore = score;
-    localStorage.setItem('blockBlastHigh',highScore);
+    localStorage.setItem('mrGoldHigh',highScore);
     alert('🎉 Chúc mừng! Bạn đã lập kỷ lục mới: '+highScore);
   }
 }
